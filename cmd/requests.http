@@ -1,0 +1,10 @@
+
+POST localhost:9999/createbook
+Content-Type: application/json
+
+{
+  "title": "samurai",
+  "description": "ggg",
+  "cover_image": "sdklsadf",
+  "access_read": true
+}
