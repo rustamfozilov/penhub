@@ -1,4 +1,4 @@
-
+### creating book
 POST localhost:9999/createbook
 Content-Type: application/json
 
@@ -7,4 +7,24 @@ Content-Type: application/json
   "description": "ggg",
   "cover_image": "sdklsadf",
   "access_read": true
+}
+
+### registration new user
+POST localhost:9999/registration_user
+Content-Type: application/json
+
+{
+  "name": "Mark",
+  "login": "Poligon",
+  "password": "sec"
+  }
+
+### registration new user with used login
+POST localhost:9999/registration_user
+Content-Type: application/json
+
+{
+  "name": "Mark",
+  "login": "Poligon",
+  "password": "sec"
 }

@@ -12,3 +12,12 @@ type Book struct {
 	Active      bool      `json:"active"`
 	Created     time.Time `json:"created"`
 }
+
+type User struct {
+	ID int64 `json:"id"`
+	Name string `json:"name"`
+	Login string `json:"login"`
+	Password string `json:"password"`
+	Active bool `json:"active"`
+	Created time.Time `json:"created"`
+}

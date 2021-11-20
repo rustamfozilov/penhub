@@ -10,7 +10,7 @@ func NewRouter(h *handlers.Handler) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/createbook", h.CreateBook)
-
+	mux.HandleFunc("/registration_user", h.RegistrationUser)
 
 	return mux
 }
