@@ -15,7 +15,15 @@ create table books
     author_id   bigint    not null references users,
     description text,
     cover_image text      not null,
-    access_read boolean not null default true,
-    active boolean not null  default true,
+    access_read boolean   not null default true,
+    active      boolean   not null default true,
     created     timestamp not null default current_timestamp
-)
+);
+
+create table users_tokens
+(
+    user_id bigint    not null references users,
+    token   text      not null unique,
+    expire  timestamp not null default current_timestamp + interval '1 hour',
+    created timestamp not null default current_timestamp
+);

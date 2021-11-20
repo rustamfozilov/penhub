@@ -6,6 +6,7 @@ import (
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/rustamfozilov/penhub/internal/types"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
 )
@@ -80,4 +81,31 @@ func (d *DB) IsLoginUsed(ctx context.Context, login string) bool {
 	}
 
 	return false
+}
+
+func (d *DB) ValidateLoginAndPassword(ctx context.Context,login, password string) (bool, int64, error) {
+	var id int64
+	var hash string
+	err := d.Pool.QueryRow(ctx, `
+		select password, id from users where login = $1
+`, login).Scan(&hash, &id)
+	if err != nil {
+		return true,0, err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	if err != nil {
+		return false,0,  err
+	}
+	return true,id, nil
+}
+
+func (d *DB) PutNewToken(ctx context.Context,token string, id int64) error {
+	_, err := d.Pool.Exec(ctx, `
+			insert into users_tokens (user_id, token, expire, created) 
+			values ($1, $2, default, default)
+`, id, token)
+	if err != nil {
+		return err
+	}
+	return nil
 }

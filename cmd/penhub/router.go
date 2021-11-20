@@ -11,6 +11,7 @@ func NewRouter(h *handlers.Handler) *http.ServeMux {
 
 	mux.HandleFunc("/createbook", h.CreateBook)
 	mux.HandleFunc("/registration_user", h.RegistrationUser)
+	mux.HandleFunc("/get_token_user", h.GetTokenForUser)
 
 	return mux
 }

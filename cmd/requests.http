@@ -28,3 +28,12 @@ Content-Type: application/json
   "login": "Poligon",
   "password": "sec"
 }
+
+### get token for user
+POST localhost:9999/get_token_user
+Content-Type: application/json
+
+{
+  "login": "Poligon",
+  "password": "sec"
+}
