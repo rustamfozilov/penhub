@@ -14,10 +14,14 @@ type Book struct {
 }
 
 type User struct {
-	ID int64 `json:"id"`
-	Name string `json:"name"`
-	Login string `json:"login"`
-	Password string `json:"password"`
-	Active bool `json:"active"`
-	Created time.Time `json:"created"`
+	ID       int64     `json:"id"`
+	Name     string    `json:"name"`
+	Login    string    `json:"login"`
+	Password string    `json:"password"`
+	Active   bool      `json:"active"`
+	Created  time.Time `json:"created"`
+}
+
+type T struct {
+	Token string `json:"token"`
 }

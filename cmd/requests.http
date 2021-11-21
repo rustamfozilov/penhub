@@ -1,3 +1,33 @@
+
+### registration new user
+POST localhost:9999/user/registration
+Content-Type: application/json
+
+{
+  "name": "Mark",
+  "login": "Poligon",
+  "password": "sec"
+  }
+
+### registration new user with used login
+POST localhost:9999/user/registration
+Content-Type: application/json
+
+{
+  "name": "Mark",
+  "login": "Poligon",
+  "password": "sec"
+}
+
+### get token for user
+POST localhost:9999/user/get_token
+Content-Type: application/json
+
+{
+  "login": "Poligon",
+  "password": "sec"
+}
+
 ### creating book
 POST localhost:9999/createbook
 Content-Type: application/json
@@ -9,31 +39,4 @@ Content-Type: application/json
   "access_read": true
 }
 
-### registration new user
-POST localhost:9999/registration_user
-Content-Type: application/json
-
-{
-  "name": "Mark",
-  "login": "Poligon",
-  "password": "sec"
-  }
-
-### registration new user with used login
-POST localhost:9999/registration_user
-Content-Type: application/json
-
-{
-  "name": "Mark",
-  "login": "Poligon",
-  "password": "sec"
-}
-
-### get token for user
-POST localhost:9999/get_token_user
-Content-Type: application/json
-
-{
-  "login": "Poligon",
-  "password": "sec"
-}
+###

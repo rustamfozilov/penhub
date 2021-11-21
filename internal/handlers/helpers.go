@@ -1,19 +1,29 @@
 package handlers
 
 import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
 )
 
-func badRequest(w http.ResponseWriter, err error)  {
+func badRequest(w http.ResponseWriter, err error) {
 	log.Println(err)
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 
-func InternalServerError(w http.ResponseWriter, err error)  {
+func InternalServerError(w http.ResponseWriter, err error) {
 	log.Println(err)
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 
+}
+
+func GetIdFromContext(ctx context.Context) (id int64, err error) {
+	id, ok := ctx.Value(AuthenticateContextKey).(int64)
+	if !ok {
+		return 0, errors.New("parsing error")
+	}
+	return id, nil
 }
 
 //func FormatAndSending()  {

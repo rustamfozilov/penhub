@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func (h *Handler) RegistrationUser(w http.ResponseWriter, r *http.Request)  {
+func (h *Handler) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	var u types.User
 
 	err := json.NewDecoder(r.Body).Decode(&u)
@@ -17,10 +17,8 @@ func (h *Handler) RegistrationUser(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 
-
-
 	err = h.Service.RegistrationUser(r.Context(), &u)
-	if errors.Is(err, services.ErrLoginUsed){
+	if errors.Is(err, services.ErrLoginUsed) {
 		badRequest(w, err)
 		return
 	}

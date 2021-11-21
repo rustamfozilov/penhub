@@ -15,11 +15,16 @@ func NewHandler(service *services.Service) *Handler {
 	return &Handler{Service: service}
 }
 
+func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 
+	id, err := GetIdFromContext(r.Context())
+	if err != nil {
+		InternalServerError(w, err)
+	}
 
-func(h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	var b types.Book
-	err := json.NewDecoder(r.Body).Decode(&b)
+	b.ID = id
+	err = json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
 		badRequest(w, err)
 		return
@@ -31,4 +36,3 @@ func(h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-

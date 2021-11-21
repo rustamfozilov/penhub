@@ -25,10 +25,7 @@ func (h *Handler) GetTokenForUser(w http.ResponseWriter, r *http.Request) {
 		InternalServerError(w, err)
 	}
 
-	type T struct {
-		Token string `json:"token"`
-	}
-		item := T{Token: token}
+	item := types.T{Token: token}
 	data, err := json.Marshal(item)
 	if err != nil {
 		InternalServerError(w, err)

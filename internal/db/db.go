@@ -31,8 +31,8 @@ func NewDB() (*DB, error) {
 func (d *DB) CreateBook(ctx context.Context, book *types.Book) error {
 	_, err := d.Pool.Exec(ctx, `
 	insert into books (title, author_id, description, cover_image, access_read, active, created)
-	 values ( $1, 1, $2, $3, $4, default, default)   
-`, book.Title, book.Description, book.Image, book.AccessRead) //TODO author_id взять из id пользвателя
+	 values ($1, $2, $3, $4, $5, default, default)   
+`, book.Title, book.ID, book.Description, book.Image, book.AccessRead)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (d *DB) IsLoginUsed(ctx context.Context, login string) bool {
 		if err != nil {
 			return false
 		}
-		if loginDb == login{
+		if loginDb == login {
 			return true
 		}
 	}
@@ -83,23 +83,23 @@ func (d *DB) IsLoginUsed(ctx context.Context, login string) bool {
 	return false
 }
 
-func (d *DB) ValidateLoginAndPassword(ctx context.Context,login, password string) (bool, int64, error) {
+func (d *DB) ValidateLoginAndPassword(ctx context.Context, login, password string) (bool, int64, error) {
 	var id int64
 	var hash string
 	err := d.Pool.QueryRow(ctx, `
 		select password, id from users where login = $1
 `, login).Scan(&hash, &id)
 	if err != nil {
-		return true,0, err
+		return true, 0, err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	if err != nil {
-		return false,0,  err
+		return false, 0, err
 	}
-	return true,id, nil
+	return true, id, nil
 }
 
-func (d *DB) PutNewToken(ctx context.Context,token string, id int64) error {
+func (d *DB) PutNewToken(ctx context.Context, token string, id int64) error {
 	_, err := d.Pool.Exec(ctx, `
 			insert into users_tokens (user_id, token, expire, created) 
 			values ($1, $2, default, default)
@@ -108,4 +108,15 @@ func (d *DB) PutNewToken(ctx context.Context,token string, id int64) error {
 		return err
 	}
 	return nil
+}
+
+func (d *DB) IdByToken(cxt context.Context, token string) (id int64, expire time.Time, err error) {
+
+	err = d.Pool.QueryRow(cxt, `
+select user_id, expire from users_tokens where token = $1
+`, token).Scan(&id, &expire)
+	if err != nil {
+		return 0, expire, err
+	}
+	return id, expire, nil
 }
