@@ -94,6 +94,7 @@ func (d *DB) ValidateLoginAndPassword(ctx context.Context, login, password strin
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	if err != nil {
+		log.Println("invalid password")
 		return false, 0, err
 	}
 	return true, id, nil
@@ -111,7 +112,7 @@ func (d *DB) PutNewToken(ctx context.Context, token string, id int64) error {
 }
 
 func (d *DB) IdByToken(cxt context.Context, token string) (id int64, expire time.Time, err error) {
-
+	log.Println(token)
 	err = d.Pool.QueryRow(cxt, `
 select user_id, expire from users_tokens where token = $1
 `, token).Scan(&id, &expire)
@@ -119,4 +120,48 @@ select user_id, expire from users_tokens where token = $1
 		return 0, expire, err
 	}
 	return id, expire, nil
+}
+
+func (d *DB) GetBookId(ctx context.Context, title string) (id int64, err error) {
+
+	err = d.Pool.QueryRow(ctx, `
+		select id from books where title = $1
+`, title).Scan(&id)
+	if errors.Is(err, pgx.ErrNoRows) {
+		log.Println("book not exist")
+		return 0, err
+	}
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}
+
+func (d *DB) BookAccess(ctx context.Context, userId, bookId int64) (bool, error) {
+	var authorId int64
+	err := d.Pool.QueryRow(ctx, `
+		select author_id from books where id = $1
+`, bookId).Scan(&authorId)
+	if errors.Is(err, pgx.ErrNoRows) {
+		log.Println("book not exist")
+	}
+	if err != nil {
+		return false, err
+	}
+	if authorId == userId {
+		return true, nil
+	}
+	return false, nil
+}
+
+func (d *DB) WriteChapter(ctx context.Context, chapter *types.Chapter) error {
+	_, err := d.Pool.Exec(ctx, `
+		insert into chapters (book_id, number, name, content,active, created) 
+		values ($1, $2, $3, $4, default, default)
+`,chapter.BookId,chapter.Number, chapter.Name,chapter.Content)
+
+	if err != nil {
+		return err
+	}
+	return nil
 }

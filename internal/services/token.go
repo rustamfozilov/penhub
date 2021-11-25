@@ -12,7 +12,9 @@ import (
 )
 
 func (s *Service) GetTokenForUser(ctx context.Context, user *types.User) (token string, err error) {
+	log.Println(user.Login, user.Password)
 	ok, id, err := s.db.ValidateLoginAndPassword(ctx, user.Login, user.Password)
+	log.Println(ok, id)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return "", ErrNoSuchUser
 	}

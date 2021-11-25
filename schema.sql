@@ -8,6 +8,14 @@ create table users
     created  timestamp not null default current_timestamp
 );
 
+create table users_tokens
+(
+    user_id bigint    not null references users,
+    token   text      not null unique,
+    expire  timestamp not null default current_timestamp + interval '1 hour',
+    created timestamp not null default current_timestamp
+);
+
 create table books
 (
     id          bigserial primary key,
@@ -19,11 +27,16 @@ create table books
     active      boolean   not null default true,
     created     timestamp not null default current_timestamp
 );
+books
 
-create table users_tokens
+
+create table chapters
 (
-    user_id bigint    not null references users,
-    token   text      not null unique,
-    expire  timestamp not null default current_timestamp + interval '1 hour',
-    created timestamp not null default current_timestamp
+        id bigserial primary key ,
+        book_id bigint not null references books,
+        number bigint not null,
+        name text not null ,
+        content text not null,
+        active      boolean   not null default true,
+        created     timestamp not null default current_timestamp
 );

@@ -1,17 +1,26 @@
 package main
 
 import (
+	"github.com/go-chi/chi/v5"
 	"github.com/rustamfozilov/penhub/internal/handlers"
-	"net/http"
 )
 
-func NewRouter(h *handlers.Handler) *http.ServeMux {
+func NewRouter(h *handlers.Handler) *chi.Mux {
 
-	mux := http.NewServeMux()
+	unAuthMux := chi.NewMux()
+	unAuthMux.Route("/user", func(r chi.Router) {
+		r.Post("/registration", h.RegistrationUser)
+		r.Get("/token", h.GetTokenForUser)
+	})
 
-	mux.HandleFunc("/user/registration", h.RegistrationUser)
-	mux.HandleFunc("/user/get_token", h.GetTokenForUser)
-	mux.HandleFunc("/createbook", h.CreateBook)
+	authMux := chi.NewMux()
+	authMux.Use(handlers.Authentication(h.Service.IdByToken))
+	authMux.Post("/api/books", h.CreateBook)
+	authMux.Post("/api/write", h.WriteBook)
+
+	mux := chi.NewMux()
+	mux.Mount(`/api/unauth`, unAuthMux)
+	mux.Mount(`/api/`, authMux)
 
 	return mux
 }

@@ -52,3 +52,17 @@ func (s *Service) RegistrationUser(ctx context.Context, user *types.User) error 
 
 	return nil
 }
+
+func (s *Service) GetBookId(ctx context.Context, bookName *types.BookTitle) (id int64, err error) {
+	 return s.db.GetBookId(ctx, bookName.Title)
+}
+
+
+
+func (s *Service) BookAccess(ctx context.Context, userId, bookId int64 ) (bool, error) {
+	return  s.db.BookAccess(ctx, userId, bookId)
+}
+
+func (s *Service) WriteChapter(ctx context.Context, chapter *types.Chapter) error {
+		return s.db.WriteChapter(ctx, chapter)
+}

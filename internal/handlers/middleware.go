@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/jackc/pgx/v4"
 	"github.com/rustamfozilov/penhub/internal/services"
+	"log"
 	"net/http"
 )
 
@@ -18,13 +19,15 @@ var AuthenticateContextKey = &contextKey{key: "authentication key"}
 
 //var ErrNoAuthentication = errors.New("no authentication")
 
-func Identification(idFunc IDFunc) func(handler http.Handler) http.Handler {
+func Authentication(idFunc IDFunc) func(handler http.Handler) http.Handler {
 	return func(handler http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			token := r.Header.Get("Authorization")
+			log.Println("token:", token)
 			id, err := idFunc(r.Context(), token)
 			if errors.Is(err, services.ErrExpired) || errors.Is(err, pgx.ErrNoRows) {
 				badRequest(w, err)
+				return
 			}
 			if err != nil {
 				InternalServerError(w, err)

@@ -23,6 +23,7 @@ func (h *Handler) GetTokenForUser(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		InternalServerError(w, err)
+		return
 	}
 
 	item := types.T{Token: token}

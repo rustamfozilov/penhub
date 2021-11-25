@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/rustamfozilov/penhub/internal/services"
 	"github.com/rustamfozilov/penhub/internal/types"
+	"log"
 	"net/http"
 )
 
@@ -20,6 +21,7 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	id, err := GetIdFromContext(r.Context())
 	if err != nil {
 		InternalServerError(w, err)
+		return
 	}
 
 	var b types.Book
@@ -35,4 +37,41 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+func (h *Handler) WriteBook(w http.ResponseWriter, r *http.Request) {
+	chapter := &types.Chapter{}
+	bookName := &types.BookTitle{}
+	err := json.NewDecoder(r.Body).Decode(chapter)
+	if err != nil {
+		badRequest(w, err)
+		return
+	}
+	err = json.NewDecoder(r.Body).Decode(bookName)
+	if err != nil {
+		badRequest(w, err)
+		return
+	}
+	userId, err := GetIdFromContext(r.Context())
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+	bookId, err := h.Service.GetBookId(r.Context(), bookName)
+	if err != nil {
+		badRequest(w, err)
+		return
+	}
+	access, err := h.Service.BookAccess(r.Context(), userId, bookId)
+	if !access {
+		log.Println("no access")
+		badRequest(w, err)
+		return
+	}
+	chapter.BookId = bookId
+	err = h.Service.WriteChapter(r.Context(), chapter)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
 }

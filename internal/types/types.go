@@ -25,3 +25,17 @@ type User struct {
 type T struct {
 	Token string `json:"token"`
 }
+
+type Chapter struct {
+	ID int64 `json:"id"`
+	BookId int64 `json:"book_id"`
+	Number int64 `json:"number"`
+	Name string `json:"name"`
+	Content string `json:"content"`
+	Active   bool      `json:"active"`
+	Created time.Time `json:"created"`
+}
+
+type BookTitle struct {
+	Title string `json:"title"`
+}
