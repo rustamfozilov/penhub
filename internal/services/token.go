@@ -48,13 +48,11 @@ func (s *Service) MakeToken(token string) (string, error) {
 }
 
 func (s *Service) IdByToken(cxt context.Context, token string) (id int64, err error) {
-
 	id, expire, err := s.db.IdByToken(cxt, token)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return 0, err // was nil
 	}
 	if err != nil {
-		log.Println(err)
 		return 0, err
 	}
 	if time.Now().After(expire) {

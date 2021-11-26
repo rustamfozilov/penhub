@@ -30,9 +30,9 @@ func NewDB() (*DB, error) {
 
 func (d *DB) CreateBook(ctx context.Context, book *types.Book) error {
 	_, err := d.Pool.Exec(ctx, `
-	insert into books (title, author_id, description, cover_image, access_read, active, created)
-	 values ($1, $2, $3, $4, $5, default, default)   
-`, book.Title, book.ID, book.Description, book.Image, book.AccessRead)
+	insert into books (title, author_id, description, cover_image, access_read, genre, active, created)
+	 values ($1, $2, $3, $4, $5,$6, default, default)   
+`, book.Title, book.ID, book.Description, book.Image, book.AccessRead, book.Genre)
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,6 @@ func (d *DB) PutNewToken(ctx context.Context, token string, id int64) error {
 }
 
 func (d *DB) IdByToken(cxt context.Context, token string) (id int64, expire time.Time, err error) {
-	log.Println(token)
 	err = d.Pool.QueryRow(cxt, `
 select user_id, expire from users_tokens where token = $1
 `, token).Scan(&id, &expire)
@@ -164,4 +163,30 @@ func (d *DB) WriteChapter(ctx context.Context, chapter *types.Chapter) error {
 		return err
 	}
 	return nil
+}
+
+func (d *DB) GetBooksById(ctx context.Context, id int64) ([]*types.Book, error) {
+		
+	books := make([]*types.Book, 0)
+	
+	rows, err := d.Pool.Query(ctx, `
+		select id, title, genre, author_id, description, cover_image from books where author_id = $1
+`, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next(){
+		var book types.Book
+		err := rows.Scan(&book.ID, &book.Title,&book.Genre, &book.AuthorId, &book.Description, &book.Image)
+		if err != nil {
+			return nil, err
+		}
+		books = append(books, &book)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return books, nil
 }

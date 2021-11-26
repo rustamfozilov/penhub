@@ -41,14 +41,10 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) WriteBook(w http.ResponseWriter, r *http.Request) {
 	chapter := &types.Chapter{}
-	bookName := &types.BookTitle{}
+
 	err := json.NewDecoder(r.Body).Decode(chapter)
 	if err != nil {
-		badRequest(w, err)
-		return
-	}
-	err = json.NewDecoder(r.Body).Decode(bookName)
-	if err != nil {
+		log.Println("1")
 		badRequest(w, err)
 		return
 	}
@@ -57,19 +53,42 @@ func (h *Handler) WriteBook(w http.ResponseWriter, r *http.Request) {
 		InternalServerError(w, err)
 		return
 	}
-	bookId, err := h.Service.GetBookId(r.Context(), bookName)
-	if err != nil {
-		badRequest(w, err)
-		return
-	}
-	access, err := h.Service.BookAccess(r.Context(), userId, bookId)
+
+	access, err := h.Service.BookAccess(r.Context(), userId, chapter.BookId)
 	if !access {
 		log.Println("no access")
 		badRequest(w, err)
 		return
 	}
-	chapter.BookId = bookId
+
 	err = h.Service.WriteChapter(r.Context(), chapter)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+}
+
+func (h *Handler) GetBooksById(w http.ResponseWriter, r *http.Request)  {
+	id, err := GetIdFromContext(r.Context())
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+
+	books, err := h.Service.GetBooksById(r.Context(), id)
+	if err != nil {
+		if err != nil {
+			InternalServerError(w, err)
+			return
+		}
+	}
+	data, err := json.Marshal(books)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(data)
 	if err != nil {
 		InternalServerError(w, err)
 		return

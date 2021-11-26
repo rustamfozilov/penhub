@@ -66,3 +66,7 @@ func (s *Service) BookAccess(ctx context.Context, userId, bookId int64 ) (bool, 
 func (s *Service) WriteChapter(ctx context.Context, chapter *types.Chapter) error {
 		return s.db.WriteChapter(ctx, chapter)
 }
+
+func (s *Service) GetBooksById(ctx context.Context, id int64) ([]*types.Book, error) {
+	return s.db.GetBooksById(ctx, id)
+}

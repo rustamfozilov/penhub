@@ -21,22 +21,23 @@ create table books
     id          bigserial primary key,
     title       text      not null,
     author_id   bigint    not null references users,
+    genre       text      not null,
     description text,
     cover_image text      not null,
     access_read boolean   not null default true,
     active      boolean   not null default true,
     created     timestamp not null default current_timestamp
 );
-books
+
 
 
 create table chapters
 (
-        id bigserial primary key ,
-        book_id bigint not null references books,
-        number bigint not null,
-        name text not null ,
-        content text not null,
-        active      boolean   not null default true,
-        created     timestamp not null default current_timestamp
+    id      bigserial primary key,
+    book_id bigint    not null references books,
+    number  bigint    not null,
+    name    text      not null,
+    content text      not null,
+    active  boolean   not null default true,
+    created timestamp not null default current_timestamp
 );
