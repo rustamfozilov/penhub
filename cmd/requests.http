@@ -10,12 +10,12 @@ Content-Type: application/json
   }
 
 ### registration new user with used login
-POST localhost:9999/user/registration
+POST localhost:9999/api/unauth/user/registration
 Content-Type: application/json
 
 {
-  "name": "Mark",
-  "login": "Poligon",
+  "name": "Test",
+  "login": "Test",
   "password": "sec"
 }
 
@@ -24,7 +24,7 @@ GET localhost:9999/api/unauth/user/token
 Content-Type: application/json
 
 {
-  "login": "Poligon",
+  "login": "Test",
   "password": "sec"
 }
 
@@ -57,4 +57,30 @@ GET localhost:9999/api/books
 Content-Type: application/json
 Authorization: 10cd60f5a3c50b966b41069c1124c11bbbf4f9c38d9d62e1066edde727f824c5b2cc3f7d754cac2bf87e24bdddd4ae0810060fe550e43f194f4f68c3a9183f3d90bca0609a8277c4b616fd381c3e4d05905ccb470f004ab420db3d753cf7100260aa69efda9129bf1acb12da0b47ddc48aba086384ea570374e051d6a75bf3659054b84a88c31cd337e0b2a05ebe8030c4b0bfb42f6c0e43d0cd143118f346efe1635c335b499c06cb3f8e5251612c99791784a6d964b48b84c286cd33b1faecdac124a80d7d298783ede85908d2a320622b95d25774fe1f362660fdf135c66d450d5952ae3b052681e9d124ade70ec5e81b99b8a47d02fe9c486cf3c1267767
 
-###
+### get Chapters
+GET localhost:9999/api/chapters
+Content-Type: application/json
+Authorization: 6385c039e1d7f7ef71edb2449ab626d6550e0ecd9b24cb15efb557544a95f593389f397132f1073fc94241ad2e4f8c1f42185c0eb90775f9ff5c4ffe6f224be38190d9d3eacddafae4aea391ab0f6f7730e972acf9c86822255daeb72f474153e16aa319fceee8a75a8c7572001e5364bf56b2962327f26ab25453c1fe2cb6fe48a742c55d52811eee1d4edec8e3898cfe2b855db231be2daffc3477a8d8117ce9947c296ed7c46f94100d078931cb62035d9013239707ca48744cfef12d79a8ff1c6016c6843ea98a6f98863ae9a75877ab66a3e4c3af777f8c36d3c4d1eeedd64d0ebab05848882a3c69fecbab374e7a825d5063e783747411bf2bc28dbe38
+
+{
+  "book_id": 2
+}
+
+### read chapter
+GET localhost:9999/api/read
+Content-Type: application/json
+Authorization: 6385c039e1d7f7ef71edb2449ab626d6550e0ecd9b24cb15efb557544a95f593389f397132f1073fc94241ad2e4f8c1f42185c0eb90775f9ff5c4ffe6f224be38190d9d3eacddafae4aea391ab0f6f7730e972acf9c86822255daeb72f474153e16aa319fceee8a75a8c7572001e5364bf56b2962327f26ab25453c1fe2cb6fe48a742c55d52811eee1d4edec8e3898cfe2b855db231be2daffc3477a8d8117ce9947c296ed7c46f94100d078931cb62035d9013239707ca48744cfef12d79a8ff1c6016c6843ea98a6f98863ae9a75877ab66a3e4c3af777f8c36d3c4d1eeedd64d0ebab05848882a3c69fecbab374e7a825d5063e783747411bf2bc28dbe38
+
+{
+  "chapter_id": 1
+}
+
+### edit title
+PUT localhost:9999/api/edit/title
+Content-Type: application/json
+Authorization: be64672bb1fab9b3357413efcf54c5894c15da0a807d12f383b287c3b3823cbce6cadaff0394ca7675bb3e27756f48d8311ab3f28a023fe91a686bf46a66319647675bd915ced0afa5514d746954f3a938d8f4a92e6f3e75d38f8a50fa1fc473a41f269b5d9b6aea939be721faf25e29e8045ca3dd6cbd8de1594558aa6ccc8c2b4ef011998fb4dfa585fabebc822f35644e54b21a5888dabd7a37e577e7e6454560ea8ecffbdbf5821e81a453c614aeb66de1f27f2927063a81773ce03f5eb5c6875e2ece8ca64d0b98e50c9070ea275f46a48ce78cab75f37f67264cc02748b0d47355e22a5479440e6b1bfd4c7417beb6d09df836e2c018c52a40b68f2e21
+
+{
+  "id": 3,
+  "title": "Edit"
+}

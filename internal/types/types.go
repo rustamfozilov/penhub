@@ -40,3 +40,11 @@ type Chapter struct {
 type BookTitle struct {
 	Title string `json:"title"`
 }
+
+type BookId struct {
+	Id int64 `json:"book_id"`
+}
+
+type ChapterId struct {
+	Id int64 `json:"chapter_id"`
+}

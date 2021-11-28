@@ -4,8 +4,8 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"github.com/jackc/pgx/v4"
+	errors "github.com/pkg/errors"
 	"github.com/rustamfozilov/penhub/internal/types"
 	"log"
 	"time"
@@ -50,14 +50,16 @@ func (s *Service) MakeToken(token string) (string, error) {
 func (s *Service) IdByToken(cxt context.Context, token string) (id int64, err error) {
 	id, expire, err := s.db.IdByToken(cxt, token)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return 0, err // was nil
+		return 0, errors.Wrap(err, "no authorization")
 	}
 	if err != nil {
 		return 0, err
 	}
-	if time.Now().After(expire) {
+	//log.Println("exp", expire)
+	//log.Println("now :",time.Now())
+	//log.Println(time.Now().After(expire))
+	if time.Now().After(expire) { //TODO дает фолс когда должен тру - исправить
 		return 0, ErrExpired
 	}
-
 	return id, nil
 }

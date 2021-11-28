@@ -2,7 +2,7 @@ package services
 
 import (
 	"context"
-	"errors"
+	errors "github.com/pkg/errors"
 	"github.com/rustamfozilov/penhub/internal/db"
 	"github.com/rustamfozilov/penhub/internal/types"
 	"golang.org/x/crypto/bcrypt"
@@ -69,4 +69,17 @@ func (s *Service) WriteChapter(ctx context.Context, chapter *types.Chapter) erro
 
 func (s *Service) GetBooksById(ctx context.Context, id int64) ([]*types.Book, error) {
 	return s.db.GetBooksById(ctx, id)
+}
+
+func (s *Service) GetChaptersByBookId(ctx context.Context, bookId *types.BookId) ([]*types.Chapter, error){
+		return s.db.GetChaptersByBookId(ctx, bookId.Id)
+}
+
+func (s *Service) ReadChapter(ctx context.Context, chaptId *types.ChapterId) (*types.Chapter,error) {
+	return s.db.ReadChapter(ctx,chaptId.Id)
+}
+
+func (s *Service) EditTitle(ctx context.Context, edit *types.Book) error {
+
+	return s.db.EditTitle(ctx, edit.ID, edit.Title)
 }
