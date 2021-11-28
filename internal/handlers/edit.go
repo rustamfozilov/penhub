@@ -10,7 +10,68 @@ import (
 
 func (h *Handler) EditTitle(w http.ResponseWriter, r *http.Request) {
 	var edit types.Book
+	err := json.NewDecoder(r.Body).Decode(&edit)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+	userId, err := GetIdFromContext(r.Context())
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	access, err := h.Service.BookAccess(r.Context(), userId, edit.ID)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+	if !access {
+		badRequest(w, errors.New("no access"))
+		return
+	}
 
+	err = h.Service.EditTitle(r.Context(), &edit)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+}
+
+func (h *Handler) EditContent(w http.ResponseWriter, r *http.Request) {
+	var editChapter types.Chapter
+	err := json.NewDecoder(r.Body).Decode(&editChapter)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+	userId, err := GetIdFromContext(r.Context())
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	access, err := h.Service.BookAccess(r.Context(), userId, editChapter.BookId)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	if !access {
+		badRequest(w, errors.New("no access"))
+		return
+	}
+	err = h.Service.EditContent(r.Context(), &editChapter)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+}
+
+func (h *Handler) EditAccess(w http.ResponseWriter, r *http.Request) {
+	var edit types.Book
 	err := json.NewDecoder(r.Body).Decode(&edit)
 	if err != nil {
 		err := errors.Wrap(err, "")
@@ -25,7 +86,6 @@ func (h *Handler) EditTitle(w http.ResponseWriter, r *http.Request) {
 	}
 	access, err := h.Service.BookAccess(r.Context(), userId, edit.ID)
 	if err != nil {
-		err := errors.Wrap(err, "")
 		InternalServerError(w, err)
 		return
 	}
@@ -34,20 +94,40 @@ func (h *Handler) EditTitle(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, err)
 		return
 	}
-
-
-	err = h.Service.EditTitle(r.Context(), &edit)
+	err = h.Service.EditAccess(r.Context(), &edit)
 	if err != nil {
-		err := errors.Wrap(err, "")
-			InternalServerError(w, err)
+		InternalServerError(w, err)
 		return
 	}
 }
 
-
-//func (h *Handler) EditContent(w http.ResponseWriter, r *http.Request)  {
-//var n
-//		json.NewDecoder(r.Body).Decode(&)
-//
-//
-//}
+func (h *Handler) EditChapterName(w http.ResponseWriter, r *http.Request)  {
+	var editChapter types.Chapter
+	err := json.NewDecoder(r.Body).Decode(&editChapter)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+	userId, err := GetIdFromContext(r.Context())
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	access, err := h.Service.BookAccess(r.Context(), userId, editChapter.BookId)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	if !access {
+		badRequest(w, errors.New("no access"))
+		return
+	}
+	err = h.Service.EditChapterName(r.Context(), &editChapter)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+}

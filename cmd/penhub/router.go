@@ -17,20 +17,19 @@ func NewRouter(h *handlers.Handler) *chi.Mux {
 	authMux := chi.NewMux()
 	authMux.Use(handlers.Authentication(h.Service.IdByToken))
 
-	authMux.Post("/book", h.CreateBook)
-	authMux.Post("/write", h.WriteBook)
-	authMux.Get("/books", h.GetBooksById)
-	authMux.Get("/chapters", h.GetChaptersByBookId) //содержание
-	authMux.Get("/read", h.ReadChapter)
-	authMux.Put("/edit/title", h.EditTitle)
-	authMux.Put("/edit/content", h.EditContent)
-
-
+	authMux.Post("/books/create", h.CreateBook)
+	authMux.Post("/books/write", h.WriteBook)
+	authMux.Get("/books", h.GetBooksByUserId)
+	authMux.Get("/chapters/list", h.GetChaptersByBookId) //содержание
+	authMux.Get("/books/read", h.ReadChapter)
+	authMux.Put("/books/title/edit", h.EditTitle)
+	authMux.Put("/books/access/edit", h.EditAccess)
+	authMux.Put("/chapters/content/edit", h.EditContent)
+	authMux.Put("/chapters/name/edit", h.EditChapterName)
 
 	mux := chi.NewMux()
 	mux.Mount(`/api/unauth`, unAuthMux)
 	mux.Mount(`/api`, authMux)
-
 
 	authMux.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte("he he"))

@@ -8,14 +8,13 @@ import (
 )
 
 func badRequest(w http.ResponseWriter, err error) {
-	log.Println(err)
+	log.Printf("%+v\n",err)
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 
 func InternalServerError(w http.ResponseWriter, err error) {
-	log.Println(err)
+	log.Printf("%+v\n", err)
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-
 }
 
 func GetIdFromContext(ctx context.Context) (id int64, err error) {

@@ -34,7 +34,7 @@ func (d *DB) CreateBook(ctx context.Context, book *types.Book) error {
 	 values ($1, $2, $3, $4, $5,$6, default, default)   
 `, book.Title, book.ID, book.Description, book.Image, book.AccessRead, book.Genre)
 	if err != nil {
-		return errors.Wrap(err, "")
+		return errors.WithStack(err)
 	}
 	return nil
 }
@@ -95,6 +95,7 @@ func (d *DB) ValidateLoginAndPassword(ctx context.Context, login, password strin
 	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	if err != nil {
 		log.Println("invalid password")
+		err := errors.WithStack(err)
 		return false, 0, err
 	}
 	return true, id, nil
@@ -106,6 +107,7 @@ func (d *DB) PutNewToken(ctx context.Context, token string, id int64) error {
 			values ($1, $2, default, default)
 `, id, token)
 	if err != nil {
+		err := errors.WithStack(err)
 		return err
 	}
 	return nil
@@ -116,6 +118,7 @@ func (d *DB) IdByToken(cxt context.Context, token string) (id int64, expire time
 select user_id, expire from users_tokens where token = $1
 `, token).Scan(&id, &expire)
 	if err != nil {
+		err := errors.WithStack(err)
 		return 0, expire, err
 	}
 	return id, expire, nil
@@ -127,10 +130,12 @@ func (d *DB) GetBookId(ctx context.Context, title string) (id int64, err error) 
 		select id from books where title = $1
 `, title).Scan(&id)
 	if errors.Is(err, pgx.ErrNoRows) {
+		err := errors.WithStack(err)
 		log.Println("book not exist")
 		return 0, err
 	}
 	if err != nil {
+		err := errors.WithStack(err)
 		return 0, err
 	}
 	return id, nil
@@ -145,6 +150,7 @@ func (d *DB) BookAccess(ctx context.Context, userId, bookId int64) (bool, error)
 		log.Println("book not exist")
 	}
 	if err != nil {
+		err := errors.WithStack(err)
 		return false, err
 	}
 	if authorId == userId {
@@ -219,14 +225,14 @@ func (d *DB) ReadChapter(ctx context.Context, id int64) (*types.Chapter, error) 
 	var chapter types.Chapter
 	err := d.Pool.QueryRow(ctx, `
 	select id, book_id, number, name, content, active, created from chapters where id = $1
-`, id).Scan(&chapter.ID, &chapter.BookId, &chapter.Number,&chapter.Name, &chapter.Content, &chapter.Active, &chapter.Created)
+`, id).Scan(&chapter.ID, &chapter.BookId, &chapter.Number, &chapter.Name, &chapter.Content, &chapter.Active, &chapter.Created)
 	if err != nil {
-		return nil, errors.Wrap(err, "")
+		return nil, errors.WithStack(err)
 	}
 	return &chapter, nil
 }
 
-func (d *DB) EditTitle(ctx context.Context,id int64, title string) error {
+func (d *DB) EditTitle(ctx context.Context, id int64, title string) error {
 	_, err := d.Pool.Exec(ctx, `
 		update books set title = $1 where id = $2
 `, title, id)
@@ -234,4 +240,37 @@ func (d *DB) EditTitle(ctx context.Context,id int64, title string) error {
 		return errors.Wrap(err, "")
 	}
 	return nil
+}
+
+func (d *DB) EditContent(ctx context.Context, edit *types.Chapter) error {
+
+	_, err := d.Pool.Exec(ctx, `
+			update chapters set content = $1 where id = $2
+`, edit.Content, edit.ID)
+	if err != nil {
+		return errors.Wrap(err, "")
+	}
+	return nil
+}
+
+func (d *DB) EditAccess(ctx context.Context, edit *types.Book) error {
+
+	_, err := d.Pool.Exec(ctx, `
+				update books set  access_read = $1 where id = $2
+`, edit.AccessRead, edit.ID)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	return nil
+}
+
+func (d *DB) EditChapterName(ctx context.Context, edit *types.Chapter) error   {
+
+	_, err := d.Pool.Exec(ctx, `
+			update chapters set name = $1 where id = $2
+`, edit.Name, edit.ID)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+return nil
 }

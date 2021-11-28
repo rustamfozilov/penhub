@@ -55,9 +55,6 @@ func (s *Service) IdByToken(cxt context.Context, token string) (id int64, err er
 	if err != nil {
 		return 0, err
 	}
-	//log.Println("exp", expire)
-	//log.Println("now :",time.Now())
-	//log.Println(time.Now().After(expire))
 	if time.Now().After(expire) { //TODO дает фолс когда должен тру - исправить
 		return 0, ErrExpired
 	}

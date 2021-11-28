@@ -8,12 +8,13 @@ create table users
     created  timestamp not null default current_timestamp
 );
 
+drop table users_tokens;
 create table users_tokens
 (
     user_id bigint    not null references users,
     token   text      not null unique,
-    expire  timestamp not null default current_timestamp + interval '1 hour',
-    created timestamp not null default current_timestamp
+    expire  timestamptz not null default current_timestamp + interval '1 hour',
+    created timestamptz not null default current_timestamp
 );
 
 create table books

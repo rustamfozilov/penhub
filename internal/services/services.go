@@ -54,32 +54,50 @@ func (s *Service) RegistrationUser(ctx context.Context, user *types.User) error 
 }
 
 func (s *Service) GetBookId(ctx context.Context, bookName *types.BookTitle) (id int64, err error) {
-	 return s.db.GetBookId(ctx, bookName.Title)
+	return s.db.GetBookId(ctx, bookName.Title)
 }
 
-
-
-func (s *Service) BookAccess(ctx context.Context, userId, bookId int64 ) (bool, error) {
-	return  s.db.BookAccess(ctx, userId, bookId)
+func (s *Service) BookAccess(ctx context.Context, userId, bookId int64) (bool, error) {
+	return s.db.BookAccess(ctx, userId, bookId)
 }
 
 func (s *Service) WriteChapter(ctx context.Context, chapter *types.Chapter) error {
-		return s.db.WriteChapter(ctx, chapter)
+	return s.db.WriteChapter(ctx, chapter)
 }
 
 func (s *Service) GetBooksById(ctx context.Context, id int64) ([]*types.Book, error) {
 	return s.db.GetBooksById(ctx, id)
 }
 
-func (s *Service) GetChaptersByBookId(ctx context.Context, bookId *types.BookId) ([]*types.Chapter, error){
-		return s.db.GetChaptersByBookId(ctx, bookId.Id)
+func (s *Service) GetChaptersByBookId(ctx context.Context, bookId *types.BookId) ([]*types.Chapter, error) {
+	return s.db.GetChaptersByBookId(ctx, bookId.Id)
 }
 
-func (s *Service) ReadChapter(ctx context.Context, chaptId *types.ChapterId) (*types.Chapter,error) {
-	return s.db.ReadChapter(ctx,chaptId.Id)
+func (s *Service) ReadChapter(ctx context.Context, chapterId *types.ChapterId) (*types.Chapter, error) {
+	chapter, err := s.db.ReadChapter(ctx, chapterId.Id)
+	if err != nil {
+		return nil, err
+	}
+	if chapter.Active == true {
+		return chapter, nil
+	}
+	return nil, errors.New("haven't access to read")
 }
 
 func (s *Service) EditTitle(ctx context.Context, edit *types.Book) error {
-
 	return s.db.EditTitle(ctx, edit.ID, edit.Title)
+}
+
+func (s *Service) EditContent(ctx context.Context, edit *types.Chapter) error {
+
+	return s.db.EditContent(ctx, edit)
+
+}
+
+func (s *Service) EditAccess(ctx context.Context, edit *types.Book) error {
+	return s.db.EditAccess(ctx, edit)
+}
+
+func (s *Service) EditChapterName(ctx context.Context, edit *types.Chapter) error   {
+	return s.db.EditChapterName(ctx, edit)
 }
