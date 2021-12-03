@@ -27,7 +27,7 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var b types.Book
-	b.ID = id
+	b.AuthorId = id
 	err = json.NewDecoder(r.Body).Decode(&b)
 	if err != nil {
 		err := errors.WithStack(err)
@@ -146,6 +146,112 @@ func (h *Handler) ReadChapter(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data, err := json.Marshal(chapter)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(data)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+}
+
+func (h *Handler) GetBooksByAuthorId(w http.ResponseWriter, r *http.Request)  {
+	var authorId types.AuthorId
+	err := json.NewDecoder(r.Body).Decode(&authorId)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+	books, err := h.Service.GetBooksById(r.Context(), authorId.Id)
+	if err != nil {
+		if err != nil {
+			InternalServerError(w, err)
+			return
+		}
+	}
+	data, err := json.Marshal(books)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(data)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+}
+
+func (h *Handler) GetAllGenres(w http.ResponseWriter, r *http.Request) {
+	genres, err := h.Service.GetAllGenres(r.Context())
+	if err != nil {
+		InternalServerError(w, err)
+	}
+	data, err := json.Marshal(genres)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(data)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+}
+
+func (h *Handler) GetBooksByGenreId(w http.ResponseWriter, r *http.Request) {
+	var genreId types.GenreID
+	err := json.NewDecoder(r.Body).Decode(&genreId)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+
+	books, err := h.Service.GetBooksByGenreId(r.Context(), genreId)
+	if err != nil {
+		InternalServerError(w, err)
+	}
+	data, err := json.Marshal(books)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(data)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+}
+
+func (h *Handler) GetGenreById(w http.ResponseWriter, r *http.Request) {
+	var genreId types.GenreID
+	err := json.NewDecoder(r.Body).Decode(&genreId)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+
+	genre, err := h.Service.GetGenreById(r.Context(), genreId)
+	if err != nil {
+		InternalServerError(w, err)
+	}
+	data, err := json.Marshal(genre)
 	if err != nil {
 		err := errors.WithStack(err)
 		InternalServerError(w, err)

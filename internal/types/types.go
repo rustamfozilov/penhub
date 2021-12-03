@@ -6,7 +6,7 @@ type Book struct {
 	ID          int64     `json:"id"`
 	Title       string    `json:"title"`
 	AuthorId    int64     `json:"author_id"`
-	Genre       string    `json:"genre"`
+	Genre       int64    `json:"genre"`
 	Description string    `json:"description"`
 	Image       string    `json:"cover_image"`
 	AccessRead  bool      `json:"access_read"`
@@ -37,6 +37,13 @@ type Chapter struct {
 	Created time.Time `json:"created"`
 }
 
+type Genre struct {
+	Id int64 `json:"id"`
+	Name string `json:"name"`
+	Active bool `json:"active"`
+}
+
+
 type BookTitle struct {
 	Title string `json:"title"`
 }
@@ -47,4 +54,20 @@ type BookId struct {
 
 type ChapterId struct {
 	Id int64 `json:"chapter_id"`
+}
+
+type AuthorName struct {
+	Name string `json:"author"`
+}
+
+type AuthorId struct {
+	Id int64 `json:"author_id"`
+}
+
+type GenreName struct {
+	Name string `json:"genre_name"`
+}
+
+type GenreID struct {
+	Id int64 `json:"genre_id"`
 }

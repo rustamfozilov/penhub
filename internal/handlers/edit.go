@@ -131,3 +131,6 @@ func (h *Handler) EditChapterName(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 }
+
+
+//TODO edit chapter number, edit genre, edit description,  edit COVER IMAGE!

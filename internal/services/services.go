@@ -22,6 +22,7 @@ var ErrInternal = errors.New("internal error")
 var ErrLoginUsed = errors.New("login already registered")
 var ErrNoSuchUser = errors.New("no such user")
 var ErrInvalidPassword = errors.New("invalid password")
+var ErrNotFound = errors.New("not found")
 
 func (s *Service) CreateBook(ctx context.Context, book *types.Book) error {
 	err := s.db.CreateBook(ctx, book)
@@ -98,6 +99,37 @@ func (s *Service) EditAccess(ctx context.Context, edit *types.Book) error {
 	return s.db.EditAccess(ctx, edit)
 }
 
-func (s *Service) EditChapterName(ctx context.Context, edit *types.Chapter) error   {
+func (s *Service) EditChapterName(ctx context.Context, edit *types.Chapter) error {
 	return s.db.EditChapterName(ctx, edit)
+}
+
+func (s *Service) SearchByTitle(ctx context.Context, title *types.BookTitle) ([]*types.Book, error) {
+	books, err := s.db.SearchByTitle(ctx, title)
+	if errors.Is(err, db.ErrNotFound) {
+		return nil, ErrNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	return books, nil
+}
+
+func (s *Service) SearchByAuthor(ctx context.Context, author *types.AuthorName) ([]*types.User, error) {
+	return s.db.SearchByAuthor(ctx, author)
+}
+
+func (s *Service) GetAllGenres(ctx context.Context) ([]*types.Genre, error) {
+	return s.db.GetAllGenres(ctx)
+}
+
+func (s *Service) SearchGenre(ctx context.Context, genreName types.GenreName) ([]*types.Genre, error) {
+	return s.db.SearchGenre(ctx, genreName)
+}
+
+func (s *Service) GetBooksByGenreId(ctx context.Context, genreId types.GenreID) ([]*types.Book, error) {
+	return s.db.GetBooksByGenreId(ctx, genreId)
+}
+
+func (s *Service) GetGenreById(ctx context.Context, genreId types.GenreID) (*types.Genre, error) {
+	return s.db.GetGenreById(ctx, genreId)
 }

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/jackc/pgx/v4"
 	"github.com/rustamfozilov/penhub/internal/services"
-	"log"
 	"net/http"
 )
 
@@ -23,7 +22,7 @@ func Authentication(idFunc IDFunc) func(handler http.Handler) http.Handler {
 	return func(handler http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			token := r.Header.Get("Authorization")
-			log.Println("token:", token)
+			//log.Println("token:", token)
 			id, err := idFunc(r.Context(), token)
 			if errors.Is(err, services.ErrExpired) || errors.Is(err, pgx.ErrNoRows) {
 				badRequest(w, err)

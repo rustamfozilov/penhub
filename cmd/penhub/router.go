@@ -18,14 +18,22 @@ func NewRouter(h *handlers.Handler) *chi.Mux {
 	authMux.Use(handlers.Authentication(h.Service.IdByToken))
 
 	authMux.Post("/books/create", h.CreateBook)
+	authMux.Get("/books/genres", h.GetAllGenres)
+	authMux.Get("/books/genres/genre", h.GetGenreById)
 	authMux.Post("/books/write", h.WriteBook)
-	authMux.Get("/books", h.GetBooksByUserId)
-	authMux.Get("/chapters/list", h.GetChaptersByBookId) //содержание
+	authMux.Get("/books", h.GetBooksByUserId) // my books
+	authMux.Get("/chapters/list", h.GetChaptersByBookId) //содержание TODO добавить группировку по намбер inc
 	authMux.Get("/books/read", h.ReadChapter)
 	authMux.Put("/books/title/edit", h.EditTitle)
 	authMux.Put("/books/access/edit", h.EditAccess)
 	authMux.Put("/chapters/content/edit", h.EditContent)
 	authMux.Put("/chapters/name/edit", h.EditChapterName)
+	authMux.Get("/search/title", h.SearchByTitle)
+	authMux.Get("/search/author", h.SearchAuthor)
+	authMux.Get("/books/author", h.GetBooksByAuthorId)
+	authMux.Get("/search/genre", h.SearchGenre)
+	authMux.Get("/books/genre", h.GetBooksByGenreId)
+
 
 	mux := chi.NewMux()
 	mux.Mount(`/api/unauth`, unAuthMux)
@@ -33,6 +41,6 @@ func NewRouter(h *handlers.Handler) *chi.Mux {
 
 	authMux.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte("he he"))
-	})
+	}) // TODO delete
 	return mux
 }
