@@ -22,7 +22,7 @@ func NewRouter(h *handlers.Handler) *chi.Mux {
 	authMux.Get("/books/genres/genre", h.GetGenreById)
 	authMux.Post("/books/write", h.WriteBook)
 	authMux.Get("/books", h.GetBooksByUserId) // my books
-	authMux.Get("/chapters/list", h.GetChaptersByBookId) //содержание TODO добавить группировку по намбер inc
+	authMux.Get("/chapters/list", h.GetChaptersByBookId)
 	authMux.Get("/books/read", h.ReadChapter)
 	authMux.Put("/books/title/edit", h.EditTitle)
 	authMux.Put("/books/access/edit", h.EditAccess)
@@ -33,7 +33,7 @@ func NewRouter(h *handlers.Handler) *chi.Mux {
 	authMux.Get("/books/author", h.GetBooksByAuthorId)
 	authMux.Get("/search/genre", h.SearchGenre)
 	authMux.Get("/books/genre", h.GetBooksByGenreId)
-
+		authMux.Put( "/books/image/edit", h.EditImage)
 
 	mux := chi.NewMux()
 	mux.Mount(`/api/unauth`, unAuthMux)

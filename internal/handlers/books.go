@@ -25,21 +25,42 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 		InternalServerError(w, err)
 		return
 	}
-
 	var b types.Book
-	b.AuthorId = id
-	err = json.NewDecoder(r.Body).Decode(&b)
+
+	data := r.FormValue("data")
+	//log.Println("data", data)
+	err = json.Unmarshal([]byte(data), &b)
 	if err != nil {
 		err := errors.WithStack(err)
 		badRequest(w, err)
 		return
 	}
-	err = h.Service.CreateBook(r.Context(), &b)
+	b.AuthorId = id
+
+	file, header, err := r.FormFile("image")
+	if err != nil {
+		err:= errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+	filename := header.Filename
+	log.Println(header)
+
+	book, err := h.Service.SaveImage(file, filename, &b)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+
+	err = h.Service.CreateBook(r.Context(), book)
 	if err != nil {
 		InternalServerError(w, err)
 		return
 	}
 }
+
+
+
 
 func (h *Handler) WriteBook(w http.ResponseWriter, r *http.Request) {
 	chapter := &types.Chapter{}
@@ -73,6 +94,8 @@ func (h *Handler) WriteBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+
 
 func (h *Handler) GetBooksByUserId(w http.ResponseWriter, r *http.Request) {
 	id, err := GetIdFromContext(r.Context())

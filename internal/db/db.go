@@ -210,7 +210,8 @@ func (d *DB) GetBooksById(ctx context.Context, id int64) ([]*types.Book, error) 
 
 func (d *DB) GetChaptersByBookId(ctx context.Context, id int64) ([]*types.Chapter, error) {
 	rows, err := d.Pool.Query(ctx, `
-	select id, book_id, number, name from chapters where book_id = $1
+	select id, book_id, number, name, active, created from chapters where book_id = $1
+		order by number 
 `, id)
 	if err != nil {
 		return nil, errors.Wrap(err, "")
@@ -219,11 +220,13 @@ func (d *DB) GetChaptersByBookId(ctx context.Context, id int64) ([]*types.Chapte
 	chapters := make([]*types.Chapter, 0)
 	for rows.Next() {
 		var chapter types.Chapter
-		err := rows.Scan(&chapter.ID, &chapter.BookId, &chapter.Number, &chapter.Name)
+		err := rows.Scan(&chapter.ID, &chapter.BookId, &chapter.Number, &chapter.Name, &chapter.Active, &chapter.Created)
 		if err != nil {
 			return nil, errors.Wrap(err, "")
 		}
-		chapters = append(chapters, &chapter)
+		if chapter.Active {
+			chapters = append(chapters, &chapter)
+		}
 	}
 	err = rows.Err()
 	if err != nil {
@@ -451,4 +454,15 @@ func (d *DB) GetGenreById(ctx context.Context, genreId types.GenreID) (*types.Ge
 		return nil, err
 	}
 		return &genre, nil
+}
+
+func (d *DB) EditImage(ctx context.Context, book *types.Book) error  {
+	_, err := d.Pool.Exec(ctx, `
+				update books set cover_image = $1 where id = $2
+`, book.Image, book.ID)
+	if err != nil {
+		err := errors.WithStack(err)
+		return err
+	}
+return nil
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/rustamfozilov/penhub/internal/services"
 	"log"
 	"net"
-
 	"net/http"
 	"os"
 )
@@ -29,9 +28,12 @@ func main() {
 		os.Exit(1)
 	}
 	defer newDB.Pool.Close()
-	service := services.NewService(newDB)
+
+	const p = `D:\penhub\images`
+	service := services.NewService(newDB, p)
 	handler := handlers.NewHandler(service)
 	mux := NewRouter(handler)
+
 	server := http.Server{
 		Addr:    net.JoinHostPort(host, port),
 		Handler: mux,

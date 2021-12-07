@@ -2,19 +2,24 @@ package services
 
 import (
 	"context"
+	"github.com/google/uuid"
 	errors "github.com/pkg/errors"
 	"github.com/rustamfozilov/penhub/internal/db"
 	"github.com/rustamfozilov/penhub/internal/types"
 	"golang.org/x/crypto/bcrypt"
+	"io"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 type Service struct {
-	db *db.DB
+	db            *db.DB
+	imagesDirPath string
 }
 
-func NewService(db *db.DB) *Service {
-	return &Service{db: db}
+func NewService(db *db.DB, imagesDirPath string) *Service {
+	return &Service{db: db, imagesDirPath: imagesDirPath}
 }
 
 var ErrExpired = errors.New("token expired")
@@ -132,4 +137,29 @@ func (s *Service) GetBooksByGenreId(ctx context.Context, genreId types.GenreID) 
 
 func (s *Service) GetGenreById(ctx context.Context, genreId types.GenreID) (*types.Genre, error) {
 	return s.db.GetGenreById(ctx, genreId)
+}
+
+func (s *Service) SaveImage(file io.Reader, fileName string, book *types.Book) (*types.Book, error) {
+
+	extension := fileName[len(fileName)-4:]
+	imageName := uuid.New().String()
+	path := filepath.Join(s.imagesDirPath, imageName+extension)
+	imageFile, err := os.Create(path)
+	if err != nil {
+		err := errors.WithStack(err)
+		return nil, err
+	}
+	defer imageFile.Close()
+
+	_, err = io.Copy(imageFile, file)
+	if err != nil {
+		err := errors.WithStack(err)
+		return nil, err
+	}
+	book.Image = imageName + extension
+	return book, nil
+}
+
+func (s *Service) EditImage(ctx context.Context, book *types.Book) error {
+			return s.db.EditImage(ctx, book)
 }

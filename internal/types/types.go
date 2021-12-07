@@ -5,7 +5,7 @@ import "time"
 type Book struct {
 	ID          int64     `json:"id"`
 	Title       string    `json:"title"`
-	AuthorId    int64     `json:"author_id"`
+	AuthorId    int64     `json:"-"`
 	Genre       int64    `json:"genre"`
 	Description string    `json:"description"`
 	Image       string    `json:"cover_image"`

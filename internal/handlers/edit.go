@@ -132,5 +132,35 @@ func (h *Handler) EditChapterName(w http.ResponseWriter, r *http.Request)  {
 	}
 }
 
+func (h *Handler) EditImage(w http.ResponseWriter, r *http.Request) {
+	var b types.Book
+	data := r.FormValue("data")
 
-//TODO edit chapter number, edit genre, edit description,  edit COVER IMAGE!
+	err := json.Unmarshal([]byte(data), &b)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+
+	file, header, err := r.FormFile("image")
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+	filename := header.Filename
+
+	book, err := h.Service.SaveImage(file, filename, &b)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+	err = h.Service.EditImage(r.Context(), book)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+}
+
+//TODO edit chapter number, edit genre, edit description
