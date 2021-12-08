@@ -101,7 +101,7 @@ func (h *Handler) EditAccess(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) EditChapterName(w http.ResponseWriter, r *http.Request)  {
+func (h *Handler) EditChapterName(w http.ResponseWriter, r *http.Request) {
 	var editChapter types.Chapter
 	err := json.NewDecoder(r.Body).Decode(&editChapter)
 	if err != nil {

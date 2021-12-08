@@ -11,14 +11,6 @@ import (
 )
 
 func main() {
-	//r := chi.NewRouter()
-	//r.Use(middleware.Logger)
-	//r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-	//	w.Write([]byte("welcome"))
-	//})
-	//r.ServeHTTP()
-	//http.ListenAndServe(":3000", r)
-	//return
 	host := "0.0.0.0"
 	port := "9999"
 

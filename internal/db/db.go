@@ -48,7 +48,7 @@ func (d *DB) RegistrationUser(ctx context.Context, user *types.User, hash []byte
 		values ($1, $2, $3, default, default)
 `, user.Name, user.Login, hash)
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 
 		return err
 	}
@@ -94,7 +94,7 @@ func (d *DB) ValidateLoginAndPassword(ctx context.Context, login, password strin
 		select password, id from users where login = $1
 `, login).Scan(&hash, &id)
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 		return true, 0, err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
@@ -171,7 +171,7 @@ func (d *DB) WriteChapter(ctx context.Context, chapter *types.Chapter) error {
 `, chapter.BookId, chapter.Number, chapter.Name, chapter.Content)
 
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 		return err
 	}
 	return nil
@@ -185,7 +185,7 @@ func (d *DB) GetBooksById(ctx context.Context, id int64) ([]*types.Book, error) 
 		select id, title, genre_id, author_id, description, cover_image, active, created from books where author_id = $1
 `, id)
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -193,16 +193,16 @@ func (d *DB) GetBooksById(ctx context.Context, id int64) ([]*types.Book, error) 
 		var book types.Book
 		err := rows.Scan(&book.ID, &book.Title, &book.Genre, &book.AuthorId, &book.Description, &book.Image, &book.Active, &book.Created)
 		if err != nil {
-			err:= errors.WithStack(err)
+			err := errors.WithStack(err)
 			return nil, err
 		}
-			if book.Active{
-				books = append(books, &book)
-			}
+		if book.Active {
+			books = append(books, &book)
+		}
 	}
 	err = rows.Err()
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 		return nil, err
 	}
 	return books, nil
@@ -278,7 +278,7 @@ func (d *DB) EditAccess(ctx context.Context, edit *types.Book) error {
 	return nil
 }
 
-func (d *DB) EditChapterName(ctx context.Context, edit *types.Chapter) error   {
+func (d *DB) EditChapterName(ctx context.Context, edit *types.Chapter) error {
 
 	_, err := d.Pool.Exec(ctx, `
 			update chapters set name = $1 where id = $2
@@ -286,17 +286,15 @@ func (d *DB) EditChapterName(ctx context.Context, edit *types.Chapter) error   {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-return nil
+	return nil
 }
 
-
-
 // ????? возвращает пустой слайс вместо NoRows, при неправильном поисковом запросе?????
-func (d *DB) SearchByTitle(ctx context.Context, title *types.BookTitle) ([]*types.Book, error)  {
-		books := make([]*types.Book, 0)
+func (d *DB) SearchByTitle(ctx context.Context, title *types.BookTitle) ([]*types.Book, error) {
+	books := make([]*types.Book, 0)
 	rows, err := d.Pool.Query(ctx, `
 			select *from books where "like"(title, $1) 
-`,title.Title + "%")
+`, title.Title+"%")
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
 	}
@@ -311,7 +309,7 @@ func (d *DB) SearchByTitle(ctx context.Context, title *types.BookTitle) ([]*type
 		err := rows.Scan(&book.ID, &book.Title, &book.AuthorId, &book.Genre, &book.Description, &book.Image, &book.AccessRead, &book.Active, &book.Created)
 		if err != nil {
 			err := errors.WithStack(err)
-				return nil, err
+			return nil, err
 		}
 		books = append(books, &book)
 	}
@@ -323,11 +321,11 @@ func (d *DB) SearchByTitle(ctx context.Context, title *types.BookTitle) ([]*type
 	return books, nil
 }
 
-func (d *DB) SearchByAuthor(ctx context.Context, author *types.AuthorName) ([]*types.User, error )  {
+func (d *DB) SearchByAuthor(ctx context.Context, author *types.AuthorName) ([]*types.User, error) {
 	authors := make([]*types.User, 0)
 	rows, err := d.Pool.Query(ctx, `
 			select id, name, active, created from users where "like"(name, $1) 
-`,author.Name + "%")
+`, author.Name+"%")
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
 	}
@@ -344,7 +342,7 @@ func (d *DB) SearchByAuthor(ctx context.Context, author *types.AuthorName) ([]*t
 			err := errors.WithStack(err)
 			return nil, err
 		}
-		if user.Active{
+		if user.Active {
 			authors = append(authors, &user)
 		}
 	}
@@ -381,10 +379,10 @@ func (d *DB) GetAllGenres(ctx context.Context) ([]*types.Genre, error) {
 			genres = append(genres, &genre)
 		}
 	}
-return genres, nil
+	return genres, nil
 }
 
-func (d *DB) SearchGenre(ctx context.Context, genreName types.GenreName) ([]*types.Genre, error)  {
+func (d *DB) SearchGenre(ctx context.Context, genreName types.GenreName) ([]*types.Genre, error) {
 
 	genres := make([]*types.Genre, 0)
 
@@ -412,7 +410,7 @@ func (d *DB) SearchGenre(ctx context.Context, genreName types.GenreName) ([]*typ
 	return genres, nil
 }
 
-func (d *DB) GetBooksByGenreId(ctx context.Context, genreId types.GenreID) ([]*types.Book,error){
+func (d *DB) GetBooksByGenreId(ctx context.Context, genreId types.GenreID) ([]*types.Book, error) {
 
 	books := make([]*types.Book, 0)
 
@@ -420,7 +418,7 @@ func (d *DB) GetBooksByGenreId(ctx context.Context, genreId types.GenreID) ([]*t
 		select id, title, genre_id, author_id, description, cover_image, active, created from books where genre_id = $1
 `, genreId.Id)
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -428,22 +426,22 @@ func (d *DB) GetBooksByGenreId(ctx context.Context, genreId types.GenreID) ([]*t
 		var book types.Book
 		err := rows.Scan(&book.ID, &book.Title, &book.Genre, &book.AuthorId, &book.Description, &book.Image, &book.Active, &book.Created)
 		if err != nil {
-			err:= errors.WithStack(err)
+			err := errors.WithStack(err)
 			return nil, err
 		}
-		if book.Active{
+		if book.Active {
 			books = append(books, &book)
 		}
 	}
 	err = rows.Err()
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 		return nil, err
 	}
 	return books, nil
 }
 
-func (d *DB) GetGenreById(ctx context.Context, genreId types.GenreID) (*types.Genre, error)  {
+func (d *DB) GetGenreById(ctx context.Context, genreId types.GenreID) (*types.Genre, error) {
 	var genre types.Genre
 
 	err := d.Pool.QueryRow(ctx, `
@@ -453,10 +451,10 @@ func (d *DB) GetGenreById(ctx context.Context, genreId types.GenreID) (*types.Ge
 		err := errors.WithStack(err)
 		return nil, err
 	}
-		return &genre, nil
+	return &genre, nil
 }
 
-func (d *DB) EditImage(ctx context.Context, book *types.Book) error  {
+func (d *DB) EditImage(ctx context.Context, book *types.Book) error {
 	_, err := d.Pool.Exec(ctx, `
 				update books set cover_image = $1 where id = $2
 `, book.Image, book.ID)
@@ -464,5 +462,5 @@ func (d *DB) EditImage(ctx context.Context, book *types.Book) error  {
 		err := errors.WithStack(err)
 		return err
 	}
-return nil
+	return nil
 }

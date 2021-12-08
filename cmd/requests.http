@@ -203,3 +203,13 @@ Content-Type: application/octet-stream
 
 < C:\Users\Ron\Pictures\edit.png
 --WebAppBoundary--
+
+### get image
+GET localhost:9999/api/books/image
+Authorization: fa263d819cef8521ca8d4d17dc1bdfff045f2ab80966520fba42130c70dba43ff3356cc4a5918f565f07f3648ace47d05208a1066874fd5a19d6c8441f0495b52aed2babd80f53acce1a958ef272010f884576d68e421d483abe062a0f16ccdd662cf6c3dafcadfb957f78b511b91ba9e28b5d210b60297b207960fb42fd201d15976f50b933ccdb38aec707c2bc60959b4ecc5fba3a18c9f0c998257632b1f3321b92742a72c2ad26863a8edc02cb24db48ab35d2eb2cea14946d6ba2abd5cbe6ad42f556fd8ae7ac88f4210c31a3aa8ddbd88c46aaa4be7cf3d7b2108e9de3d9b4fbfcdfce68fe90927ae9e7af7d7e8bcf03725d1b06048acda7215796624f
+Content-Type: application/json
+
+{
+  "image_name": "8d9883b3-3edd-48e4-8665-3bd5940840e7.png"
+}
+

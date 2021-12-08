@@ -8,7 +8,7 @@ import (
 )
 
 func badRequest(w http.ResponseWriter, err error) {
-	log.Printf("%+v\n",err)
+	log.Printf("%+v\n", err)
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 

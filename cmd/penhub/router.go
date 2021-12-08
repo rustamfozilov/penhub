@@ -17,6 +17,9 @@ func NewRouter(h *handlers.Handler) *chi.Mux {
 	authMux := chi.NewMux()
 	authMux.Use(handlers.Authentication(h.Service.IdByToken))
 
+	authMux.Route("/books", func(r chi.Router) {
+
+	})
 	authMux.Post("/books/create", h.CreateBook)
 	authMux.Get("/books/genres", h.GetAllGenres)
 	authMux.Get("/books/genres/genre", h.GetGenreById)
@@ -33,7 +36,8 @@ func NewRouter(h *handlers.Handler) *chi.Mux {
 	authMux.Get("/books/author", h.GetBooksByAuthorId)
 	authMux.Get("/search/genre", h.SearchGenre)
 	authMux.Get("/books/genre", h.GetBooksByGenreId)
-		authMux.Put( "/books/image/edit", h.EditImage)
+	authMux.Put("/books/image/edit", h.EditImage)
+	authMux.Get("/books/image", h.GetImageByName)
 
 	mux := chi.NewMux()
 	mux.Mount(`/api/unauth`, unAuthMux)

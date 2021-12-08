@@ -39,7 +39,7 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 
 	file, header, err := r.FormFile("image")
 	if err != nil {
-		err:= errors.WithStack(err)
+		err := errors.WithStack(err)
 		badRequest(w, err)
 		return
 	}
@@ -58,9 +58,6 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
-
-
 
 func (h *Handler) WriteBook(w http.ResponseWriter, r *http.Request) {
 	chapter := &types.Chapter{}
@@ -94,8 +91,6 @@ func (h *Handler) WriteBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
-
 
 func (h *Handler) GetBooksByUserId(w http.ResponseWriter, r *http.Request) {
 	id, err := GetIdFromContext(r.Context())
@@ -183,7 +178,7 @@ func (h *Handler) ReadChapter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) GetBooksByAuthorId(w http.ResponseWriter, r *http.Request)  {
+func (h *Handler) GetBooksByAuthorId(w http.ResponseWriter, r *http.Request) {
 	var authorId types.AuthorId
 	err := json.NewDecoder(r.Body).Decode(&authorId)
 	if err != nil {
@@ -287,4 +282,29 @@ func (h *Handler) GetGenreById(w http.ResponseWriter, r *http.Request) {
 		InternalServerError(w, err)
 		return
 	}
+}
+
+func (h *Handler) GetImageByName(w http.ResponseWriter, r *http.Request) {
+	var n types.ImageName
+	err := json.NewDecoder(r.Body).Decode(&n)
+	if err != nil {
+		err := errors.WithStack(err)
+		badRequest(w, err)
+		return
+	}
+
+	file, err := h.Service.GetImageByName(n.Name)
+	if err != nil {
+		InternalServerError(w, err)
+		return
+	}
+	w.Header().Set("Content-Type", "image/png") //TODO
+
+	_, err = w.Write(file)
+	if err != nil {
+		err := errors.WithStack(err)
+		InternalServerError(w, err)
+		return
+	}
+
 }

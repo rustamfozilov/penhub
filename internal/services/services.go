@@ -161,5 +161,15 @@ func (s *Service) SaveImage(file io.Reader, fileName string, book *types.Book) (
 }
 
 func (s *Service) EditImage(ctx context.Context, book *types.Book) error {
-			return s.db.EditImage(ctx, book)
+	return s.db.EditImage(ctx, book)
+}
+
+func (s *Service) GetImageByName(name string) ([]byte, error) {
+	path := s.imagesDirPath + `\` + name
+	file, err := os.ReadFile(path)
+	if err != nil {
+		err := errors.WithStack(err)
+		return nil, err
+	}
+	return file, nil
 }
