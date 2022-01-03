@@ -11,10 +11,10 @@ import (
 	"time"
 )
 
+var ErrNoAuthorization = errors.New("no authorization")
+
 func (s *Service) GetTokenForUser(ctx context.Context, user *types.User) (token string, err error) {
-	log.Println(user.Login, user.Password)
 	ok, id, err := s.db.ValidateLoginAndPassword(ctx, user.Login, user.Password)
-	log.Println(ok, id)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return "", ErrNoSuchUser
 	}
@@ -50,12 +50,12 @@ func (s *Service) MakeToken(token string) (string, error) {
 func (s *Service) IdByToken(cxt context.Context, token string) (id int64, err error) {
 	id, expire, err := s.db.IdByToken(cxt, token)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return 0, errors.Wrap(err, "no authorization")
+		return 0, ErrNoAuthorization
 	}
 	if err != nil {
 		return 0, err
 	}
-	if time.Now().After(expire) { //TODO дает фолс когда должен тру - исправить
+	if time.Now().After(expire) {
 		return 0, ErrExpired
 	}
 	return id, nil

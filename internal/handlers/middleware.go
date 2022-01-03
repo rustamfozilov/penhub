@@ -3,8 +3,9 @@ package handlers
 import (
 	"context"
 	"errors"
-	"github.com/jackc/pgx/v4"
+	"github.com/go-chi/chi/v5"
 	"github.com/rustamfozilov/penhub/internal/services"
+	"log"
 	"net/http"
 )
 
@@ -16,16 +17,14 @@ type contextKey struct {
 
 var AuthenticateContextKey = &contextKey{key: "authentication key"}
 
-//var ErrNoAuthentication = errors.New("no authentication")
-
 func Authentication(idFunc IDFunc) func(handler http.Handler) http.Handler {
 	return func(handler http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			token := r.Header.Get("Authorization")
-			//log.Println("token:", token)
 			id, err := idFunc(r.Context(), token)
-			if errors.Is(err, services.ErrExpired) || errors.Is(err, pgx.ErrNoRows) {
-				badRequest(w, err)
+			if errors.Is(err, services.ErrExpired) || errors.Is(err, services.ErrNoAuthorization) {
+				log.Println(err)
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
 			if err != nil {
@@ -37,4 +36,16 @@ func Authentication(idFunc IDFunc) func(handler http.Handler) http.Handler {
 			handler.ServeHTTP(w, r)
 		})
 	}
+}
+
+func NotFound(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		rctx := chi.RouteContext(r.Context())
+		tctx := chi.NewRouteContext()
+		if !rctx.Routes.Match(tctx, r.Method, r.URL.Path) {
+			http.NotFound(w, r)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }

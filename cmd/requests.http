@@ -1,12 +1,12 @@
 
 ### registration new user
-POST localhost:9999/user/registration
+POST localhost:9999/api/unauth/user/registration
 Content-Type: application/json
 
 {
-  "name": "Mark",
-  "login": "Poligon",
-  "password": "sec"
+  "name": "Rustam",
+  "login": "avgur1998",
+  "password": "secret"
   }
 
 ### registration new user with used login
@@ -14,9 +14,9 @@ POST localhost:9999/api/unauth/user/registration
 Content-Type: application/json
 
 {
-  "name": "Test",
-  "login": "Test",
-  "password": "sec"
+  "name": "Rustam",
+  "login": "avgur1998",
+  "password": "secret"
 }
 
 ### get token for user
@@ -24,24 +24,23 @@ GET localhost:9999/api/unauth/user/token
 Content-Type: application/json
 
 {
-  "login": "Test",
-  "password": "sec"
+  "login": "avgur1998",
+  "password": "secret"
 }
-
 
 ### creating book
 POST localhost:9999/api/books/create
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-Authorization: 3dd1c610b68d238369d4ef3f5c54d8eb98f6731e5d7e57c6240620e1fa3f2204bad349d1ec573a0855777389ea71453d087d1ef41b95dbe81d52e695a9ed50d9026193c2deee6449d8d4841758c4daef299586e89734d45920b4a4e2db5362e788247b13a18bf4948313f014fca3c9bdea0aafd58c58b0af58e67eb9e9ce3deae9d4b9264be198b1d3841d83895e3d382b6a7c965e22d6b431adb224f08da858c4df9405e8d8281149ca7ff69c0f402d7526f2b7b537892e3a30f54479b676a3725fd2ed572dc8012a2307d4009bc4d9dc21d6352fef34ac0f8203c44f410e5ca7f58f12364887214312b3986d234bf333bca737976b6b9a33af9223a98b1470
+Authorization: ff65d10f1498ea8e417663af0fa3e37e39c148388948d8d5dd6b538fc43ef433e7ae89a3caf6883cb9f8479b095d31031e6d859268ff1df26a9f7bb005964d06c5d2785490bbf1206a4d8316924d6370fb1c875a3577e437e0b151d51a10eda4519e78f3d966771d466d8cbfcf3c023b142fc8ee5dd3f3e034446fcda9b6c36df3565744eb6c5f3e7a0bd7863a421a53cf137eedd601e9a49b3dc89a24241e2df9dcf67965eeab4d74366eddfd74b81013d4016601cc8ff4682feeb55e01718a18407ae1ba93904f16889c02ea0f6f238e7732e1b40cc0d752015cb969161bebab0d896ccc1bbcc51959430cdd6b9e60443e1b87d29aeab49897de2cb244e343
 
 --WebAppBoundary
 Content-Disposition: form-data; name="data"
 Content-Type: application/json
 
 {
-  "title": "Last",
+  "title": "Red hat",
   "genre": 3,
-  "description": "gone",
+  "description": "Свежий вгляд на сказку \"Красная шапочка\" в формате шляпного чаепития",
   "access_read": true
 }
 --WebAppBoundary
@@ -51,131 +50,11 @@ Content-Type: application/octet-stream
 < C:\Users\Ron\Pictures\ph — копия.png
 --WebAppBoundary--
 
-### write book
-POST localhost:9999/api/books/write
-Content-Type: application/json
-Authorization: 8de70e19689e4ce64a008177d32ae00337146da83a4912e32c03c45c931025218736f9f99219f6d9cb93be5329d1a05949d4a33673ae83d19f8a068a24c751f046e5230cafb8eb9248a3b8522c757084902b2e7d37c5485464643858c888103af2e6d50a60d7b0ba34ad0b7a445d29111d872b715617c0cc664e83b285f6e100afab4494b767fb1031bf7263967d57bbcca102d34e9f9aa6c493c3ba6aae94ab827425a20b110f39a1877813066fa5fa96cc63602e52c261ade2f0a9265449baffe556b48326352906af3f008f5ec82e41bf87a0b2dc6b99f9141d23989f842ed3a077a800771628bc8a124cb20b9734727e6c86397076240520e0c87b7e9b11
-
-{
-  "book_id": 2,
-  "number": 3,
-  "name": "Third",
-  "content": "snkfnsjfajafajfsd"
-}
-
-### Get books
-GET localhost:9999/api/books
-Content-Type: application/json
-Authorization: 8de70e19689e4ce64a008177d32ae00337146da83a4912e32c03c45c931025218736f9f99219f6d9cb93be5329d1a05949d4a33673ae83d19f8a068a24c751f046e5230cafb8eb9248a3b8522c757084902b2e7d37c5485464643858c888103af2e6d50a60d7b0ba34ad0b7a445d29111d872b715617c0cc664e83b285f6e100afab4494b767fb1031bf7263967d57bbcca102d34e9f9aa6c493c3ba6aae94ab827425a20b110f39a1877813066fa5fa96cc63602e52c261ade2f0a9265449baffe556b48326352906af3f008f5ec82e41bf87a0b2dc6b99f9141d23989f842ed3a077a800771628bc8a124cb20b9734727e6c86397076240520e0c87b7e9b11
-
-### get Chapters
-GET localhost:9999/api/chapters/list
-Content-Type: application/json
-Authorization: 8de70e19689e4ce64a008177d32ae00337146da83a4912e32c03c45c931025218736f9f99219f6d9cb93be5329d1a05949d4a33673ae83d19f8a068a24c751f046e5230cafb8eb9248a3b8522c757084902b2e7d37c5485464643858c888103af2e6d50a60d7b0ba34ad0b7a445d29111d872b715617c0cc664e83b285f6e100afab4494b767fb1031bf7263967d57bbcca102d34e9f9aa6c493c3ba6aae94ab827425a20b110f39a1877813066fa5fa96cc63602e52c261ade2f0a9265449baffe556b48326352906af3f008f5ec82e41bf87a0b2dc6b99f9141d23989f842ed3a077a800771628bc8a124cb20b9734727e6c86397076240520e0c87b7e9b11
-
-{
-  "book_id": 5
-}
-
-### read chapter
-GET localhost:9999/api/books/read
-Content-Type: application/json
-Authorization: 6385c039e1d7f7ef71edb2449ab626d6550e0ecd9b24cb15efb557544a95f593389f397132f1073fc94241ad2e4f8c1f42185c0eb90775f9ff5c4ffe6f224be38190d9d3eacddafae4aea391ab0f6f7730e972acf9c86822255daeb72f474153e16aa319fceee8a75a8c7572001e5364bf56b2962327f26ab25453c1fe2cb6fe48a742c55d52811eee1d4edec8e3898cfe2b855db231be2daffc3477a8d8117ce9947c296ed7c46f94100d078931cb62035d9013239707ca48744cfef12d79a8ff1c6016c6843ea98a6f98863ae9a75877ab66a3e4c3af777f8c36d3c4d1eeedd64d0ebab05848882a3c69fecbab374e7a825d5063e783747411bf2bc28dbe38
-
-{
-  "chapter_id": 1
-}
-
-### edit title
-PUT localhost:9999/api/books/title/edit
-Content-Type: application/json
-Authorization: be64672bb1fab9b3357413efcf54c5894c15da0a807d12f383b287c3b3823cbce6cadaff0394ca7675bb3e27756f48d8311ab3f28a023fe91a686bf46a66319647675bd915ced0afa5514d746954f3a938d8f4a92e6f3e75d38f8a50fa1fc473a41f269b5d9b6aea939be721faf25e29e8045ca3dd6cbd8de1594558aa6ccc8c2b4ef011998fb4dfa585fabebc822f35644e54b21a5888dabd7a37e577e7e6454560ea8ecffbdbf5821e81a453c614aeb66de1f27f2927063a81773ce03f5eb5c6875e2ece8ca64d0b98e50c9070ea275f46a48ce78cab75f37f67264cc02748b0d47355e22a5479440e6b1bfd4c7417beb6d09df836e2c018c52a40b68f2e21
-
-{
-  "id": 3,
-  "title": "Edit"
-}
-
-### edit content
-PUT localhost:9999/api/chapters/content/edit
-Content-Type: application/json
-Authorization: 92c625956c6086a44424eff20e3791a61540fea2c548411612ed3b8e7842034c5840333f7d92f16d9f5d18695118e6625b2db81fa0d603d43d210e84dc90332c37723d95e4d690ad93aed951f7836a3824846fb98b1a5cddefd10bfcd1276af0f735673a79604c01fd057f69eae45bfaa0f97fc870a6df8a3b7ed66f0abd825279c6b6539409873eacdb8d4e5d6b83e1c7b99d7737b83f7f6362a4e4c4464c0c377852db86f52f3113ec7bfa17c35b66a5e2e574a90a7e6f94877ccabd1dcf668cbcac7b5434f09c7887e60c667a7f07999ce5a96273b750cbd68f7d3e717cdbe500e5b550346c9ae0342e5290a564e3738a0d37ad5e73eee24df26f8dc74a08
-
-{
-  "id": 2,
-  "book_id": 4,
-  "content": "Edit"
-}
-
-### edit book access to read
-PUT localhost:9999/api/books/access/edit
-Content-Type: application/json
-Authorization: 92c625956c6086a44424eff20e3791a61540fea2c548411612ed3b8e7842034c5840333f7d92f16d9f5d18695118e6625b2db81fa0d603d43d210e84dc90332c37723d95e4d690ad93aed951f7836a3824846fb98b1a5cddefd10bfcd1276af0f735673a79604c01fd057f69eae45bfaa0f97fc870a6df8a3b7ed66f0abd825279c6b6539409873eacdb8d4e5d6b83e1c7b99d7737b83f7f6362a4e4c4464c0c377852db86f52f3113ec7bfa17c35b66a5e2e574a90a7e6f94877ccabd1dcf668cbcac7b5434f09c7887e60c667a7f07999ce5a96273b750cbd68f7d3e717cdbe500e5b550346c9ae0342e5290a564e3738a0d37ad5e73eee24df26f8dc74a08
-
-{
-  "id": 4,
-  "access": false
-}
-
-### edit chapter name
-PUT localhost:9999/api/chapters/name/edit
-Content-Type: application/json
-Authorization: 828719c874a1948aa79eff55283b45bc4b60269c50dba053c41723c7f1e9e2c6c5a87e25ba436d9d92a79f5f78a9a009267f2da616f37b5334eb3782a22fc657641cee2e489b02a7ebede0a84aa0b0544dafce88bb9fdaee2575430c949fa10ed56cc3fcf92d5cb6ccf4f8053e4e380fb2e3a26ece2f3bcb5f4e59b7c000e6dd38b53861679fa4f7821720b509d49efab147b979a03346e7c6caaeca174f486c2cfa884508db7f4c75566c2c4a3848016cb8c3735419b4f95b8a8766f093c1bb547db3cbeb8f4c08d4df6b482af6767cdc5560c94350e9013a381f0f8b54ed28ac8e9e4aded7d07e2ca2478190a492df4bdc46bdfc44cb32a977c04360495611
-
-{
-  "id": 2,
-  "book_id": 4,
-  "name": "Edited"
-}
-
-### search by title
-GET localhost:9999/api/search/title
-Content-Type: application/json
-Authorization: e72a782be3116228ff44aa27b7bcaa59605f5c2fae9d14363e20c6ba87682496818566f5aedd5909b9956a41235d1013c140d8f299c4aa46d43b519a96498d8adf646e73674e732ffe9a3493bb96d72104c51c5bd50f853d10d5f4e3f77aa4335249d64966f1ff209a76767a26a5c1033d73a0bf4a06710e93f0f6f647dbe4b0a5aa4ae3974f5e1628fed8c05d26866519685ecf2db141bc71c6052b635fd9203b2994442fb8ff1fcb9618354f663c5f5ad522f789eeede9fedf59f718262aa39588407e60136b4db3d90f8931c625bb646a9cd21ee3ca3bb0b65ce16f08e1f981cde89fb862cc2b8dd5caac0762f5e8bb2f2a8231489160c617afb6bec1345c
-
-{
-  "title": "Sun"
-}
-
-### search by author
-GET localhost:9999/api/search/author
-Content-Type: application/json
-Authorization: acdfe6c8a67acfdcc562fe15b1a666aad62929d06b91ad973c9f3ed036f85eb3230f09b28068f269cdc12a577d748995e66ec116f41adb55e9dd5193c2b19b847a38210ea118829cba1e63f6099fe285ee8a049010ff2f7e7006f5bebd94f3e0fa10a6f5b8766fbe9f2eae5a0fc6dcd147fbea7702fe4eb00eb55d77c702f52bfbed5228987a0d3bb81c2f365ea3572348201c46118c874c421e93a5bc2bad8aec9bc13a8c2bff1193f7751f436055958cd8ecb57222b24e0140b50384b98e4c23388b667cb6cf3cc3c935433649d29250682b70f3d89ac7b236729f28cff788876fca133c7040b9d1ead8ea374900835e8dc2d8c70892130c264105e7ae158c
-
-{
-  "author": "Te"
-}
-
-### get books by author_id
-GET localhost:9999/api/books/author
-Content-Type: application/json
-Authorization: acdfe6c8a67acfdcc562fe15b1a666aad62929d06b91ad973c9f3ed036f85eb3230f09b28068f269cdc12a577d748995e66ec116f41adb55e9dd5193c2b19b847a38210ea118829cba1e63f6099fe285ee8a049010ff2f7e7006f5bebd94f3e0fa10a6f5b8766fbe9f2eae5a0fc6dcd147fbea7702fe4eb00eb55d77c702f52bfbed5228987a0d3bb81c2f365ea3572348201c46118c874c421e93a5bc2bad8aec9bc13a8c2bff1193f7751f436055958cd8ecb57222b24e0140b50384b98e4c23388b667cb6cf3cc3c935433649d29250682b70f3d89ac7b236729f28cff788876fca133c7040b9d1ead8ea374900835e8dc2d8c70892130c264105e7ae158c
-
-{
-  "author_id": 3
-}
-
 ### get all genres
 GET localhost:9999/api/books/genres
 Content-Type: application/json
-Authorization: 4f2c6d0cee5bfc712d0543a09ef9dc56d994b6d3572dc9f4d40b1fed41fe5d636b49ebe47be2524b6eeece8d6e7eb116185bf574a3eae27c4f5a3ee0d04c707fa5e62931b2f4c0f066d2a34bcbf11cc4c0f002e4177fe5fe678b2c3d69c0ceb47a709e26b8e830acd2aef8ec91f23b6a5f252cbd1649bada11f5b0e767df7b4d248fc3e6206eeb3538a6f8dc8d6de3da4021b61b042e339463febaf0d5fa8b1ba15125f003463d5647389ceaf41246107bc894b03dfb8cdb55cb881f0f55cdaedfb28e27bf0f4a8f504d3aa0a6016d5d676e0e6b37d3970efb3f70a53c4836b57b78010936f6a75c2ee926502dd503f491564df0cc199520743d653e808d1789
+Authorization:ff65d10f1498ea8e417663af0fa3e37e39c148388948d8d5dd6b538fc43ef433e7ae89a3caf6883cb9f8479b095d31031e6d859268ff1df26a9f7bb005964d06c5d2785490bbf1206a4d8316924d6370fb1c875a3577e437e0b151d51a10eda4519e78f3d966771d466d8cbfcf3c023b142fc8ee5dd3f3e034446fcda9b6c36df3565744eb6c5f3e7a0bd7863a421a53cf137eedd601e9a49b3dc89a24241e2df9dcf67965eeab4d74366eddfd74b81013d4016601cc8ff4682feeb55e01718a18407ae1ba93904f16889c02ea0f6f238e7732e1b40cc0d752015cb969161bebab0d896ccc1bbcc51959430cdd6b9e60443e1b87d29aeab49897de2cb244e343
 
-### search genres
-GET localhost:9999/api/search/genre
-Content-Type: application/json
-Authorization: 6288a2a093a6436d1a314d3927bb5496d0205e0a86225cb119b3d33cb44c04d55572eeea246b291122d08c78120a8d47bb6821d2b6b38ca131426abc0bddf5b0db719672a33e82c9e2731924b26d388303415b1d6ceb59f89f90ac478f9c5ff607d8e85a43f61969bece376832619fcb7fe78a604084e2dce96cce1f4b14abba3a03d3059ed599c347b1d9476a8081a04774e3dcd3e4ee1ef1e9f9651b489ac27904bf038ea0809bc21ad2ffade8d668949efc95cdb9e8af635d29197f312b989ab132421ba3a997d0f066c75dfa7c6b1f133f127c639e97ff46da5ab3dbe8394c8cc0230eff8eac0360732bc47969808d1a4efc904bca09f3c5aa2c561d7f64
-
-{
-  "genre_name": "Fa"
-}
-### get books by genre id
-GET localhost:9999/api/books/genre
-Content-Type: application/json
-Authorization: 6288a2a093a6436d1a314d3927bb5496d0205e0a86225cb119b3d33cb44c04d55572eeea246b291122d08c78120a8d47bb6821d2b6b38ca131426abc0bddf5b0db719672a33e82c9e2731924b26d388303415b1d6ceb59f89f90ac478f9c5ff607d8e85a43f61969bece376832619fcb7fe78a604084e2dce96cce1f4b14abba3a03d3059ed599c347b1d9476a8081a04774e3dcd3e4ee1ef1e9f9651b489ac27904bf038ea0809bc21ad2ffade8d668949efc95cdb9e8af635d29197f312b989ab132421ba3a997d0f066c75dfa7c6b1f133f127c639e97ff46da5ab3dbe8394c8cc0230eff8eac0360732bc47969808d1a4efc904bca09f3c5aa2c561d7f64
-
-{
-  "genre_id": 1
-}
 ### get genre by genre id
 GET localhost:9999/api/books/genres/genre
 Content-Type: application/json
@@ -183,6 +62,28 @@ Authorization: 6288a2a093a6436d1a314d3927bb5496d0205e0a86225cb119b3d33cb44c04d55
 
 {
   "genre_id": 5
+}
+
+### Get all my books
+GET localhost:9999/api/books
+Content-Type: application/json
+Authorization:
+
+{
+  "last_id": 0
+}
+
+### edit book
+PUT localhost:9999/api/books/edit
+Authorization: e67ebbd4a5d2d3be136725067415e22b15d7c3b075263d858ddf303f7ca48f253d5ee78324c0a25a35b66149835724d6c61f75fcf5281454cf5f6136e8983f54dbf90484d11b85ec738c0a22348c31b1b90df67f1474ff64b1edc0041b207d575e2d795d0686ca50377876bbfdc21cf3bf28558a48608006838876eeafef8fe12cd1f5bff8f23f6f097f6a7657d68a56754ad82ad903cb7fc122c138376ebcc09b5179bfe49f6f1b859a4815e348078c2c99915446121ede2806868dfd7549a98871407d05390be2c3723ac37f1fa2204e4ea582aa33f34dabc76e9b1f4cac1c1f84346c3b2f16f582dc0f4442cefb297ea1f9f309f7d167d5ee94e80f40bee6
+Content-Type: application/json
+
+{
+  "id": 2,
+  "title": "Edited",
+  "genre": 15,
+  "description": "edited",
+  "access_read": true
 }
 
 ### edit image
@@ -195,7 +96,7 @@ Content-Disposition: form-data; name="data"
 Content-Type: application/json
 
 {
-  "id": 4
+  "id": 2
 }
 --WebAppBoundary
 Content-Disposition: form-data; name="image"; filename="edit.png"
@@ -204,12 +105,182 @@ Content-Type: application/octet-stream
 < C:\Users\Ron\Pictures\edit.png
 --WebAppBoundary--
 
-### get image
+### get image by image_name
 GET localhost:9999/api/books/image
-Authorization: fa263d819cef8521ca8d4d17dc1bdfff045f2ab80966520fba42130c70dba43ff3356cc4a5918f565f07f3648ace47d05208a1066874fd5a19d6c8441f0495b52aed2babd80f53acce1a958ef272010f884576d68e421d483abe062a0f16ccdd662cf6c3dafcadfb957f78b511b91ba9e28b5d210b60297b207960fb42fd201d15976f50b933ccdb38aec707c2bc60959b4ecc5fba3a18c9f0c998257632b1f3321b92742a72c2ad26863a8edc02cb24db48ab35d2eb2cea14946d6ba2abd5cbe6ad42f556fd8ae7ac88f4210c31a3aa8ddbd88c46aaa4be7cf3d7b2108e9de3d9b4fbfcdfce68fe90927ae9e7af7d7e8bcf03725d1b06048acda7215796624f
+Authorization:
 Content-Type: application/json
 
 {
   "image_name": "8d9883b3-3edd-48e4-8665-3bd5940840e7.png"
 }
+
+### delete book
+DELETE localhost:9999/api/books/delete
+Content-Type: application/json
+Authorization: 64ad5422c7d6780cc015be461481f1fd9837685931249e79a928c92b0fe1f467de0776507e4439291b168feee2058f65e0febb7701a58f33f351b1dcb6a8c7e7137a36ee8aac00a0c5091814f08a90de755b40e74cf7d1d294bfa50b43e96e415a1735c1b9cd61072eb9d04c7a32a5fc4cd51216927915ee76dabf2d8065dcca0f70d0d0d2622d90facf1a64c005623c517b1f7969e59f70d6b07474556603d9f089c19fe4fae29241ba5c00a049dc8c75e460f1b5fd0bc695c4896205e0abff2ad51c01ffe49ee57f3dc16dcf1e064af33a94a6bbc7c656375998c549da8f3f6b64df3291ee1b461ab9e62879e13ef528bda5dd2df81e55db5bc7e0bb8eff31
+
+{
+  "id": 1
+}
+
+### recover book
+DELETE localhost:9999/api/books/delete
+Content-Type: application/json
+Authorization: cd33bfffafff1368587dc04548aec1d97cc277766d15d43b07595fbc319dcadd4d16c50969403172808f8615281e233a8c528135247efd7724e421b1315a90da3fdc6d58760d33280544a41092ea4ceca9aaeabc58971b17df703f99d22e67d4c10f3aec28f2ea60c1ec6b9e21c64f294550cb709127b9fa98b2d0c2c9c96bcc5e9d10c153c7233cc55f633c2b46576ab6519dd6c1d4f9611764e9b12d6b72e7c774c206cb5269f3c3cf651ac55771b44c220cfeb10cee8b265aee3573108d5d8f2d927883567be3a3830ef811d3c9bf005c72ef7b80dc3c4534ddeb2ed44639c52a50f444e687509f0235bc9b5c4ff0c18228a0d16441994045a9e5097e3ccd
+
+{
+  "id": 2,
+  "active": true
+}
+
+
+### write chapter
+POST localhost:9999/api/chapters/write
+Content-Type: application/json
+Authorization:
+
+{
+  "book_id": 2,
+  "number": 1,
+  "name": "Предисловие автора",
+  "content": "Я посвящаю сию книгу моей жене Генриете, твои пирожки вдохновили меня взяться за эту книгу"
+}
+
+### get chapters
+GET localhost:9999/api/chapters/list
+Content-Type: application/json
+Authorization:
+
+{
+  "book_id": 2
+}
+
+### read chapter
+GET localhost:9999/api/chapters/read
+Content-Type: application/json
+Authorization:
+
+{
+  "chapter_id": 1
+}
+
+### edit chapter
+PUT localhost:9999/api/chapters/edit
+Content-Type: application/json
+Authorization: 33cc128248d1076b8a0332301310f5e77957d892f96de45093d24472ad9e301afdf53b627853d2e30522600342898d04924184a62079331bf8b2dac1b7306b9d95d4fe7d3a678dfa87c2f33e769549175ff78e74d37bcddcce405527b168ed83dfc99e982b1d12e80996527c168489ddee259a6ed991d0adb32fe0c500b49eede08c6659bea1af258fc68c4d4579ccfda6df475eaa45e37e5cb17af58431f7c0160b4677cf995076fb30fd53c1e32f00bdc1a0e1fab746efc2c1db243bac530469aae0a40dce101deaabace02a89f13686b1d3c853faca3cf32435c7b8e8129f9147889953330e387c8bcc30b1a0bdd8d1a6d23ee9bd68a08d44fec03b430870
+
+{
+  "id": 1,
+  "book_id": 2,
+  "number": 100,
+  "content": "edited",
+  "name": "edited"
+}
+
+### delete chapter
+DELETE localhost:9999/api/chapters/delete
+Content-Type: application/json
+Authorization: 039789be04d602dfe5dd6f2b248342080a9fdd97237064430ac953d5ad0896aadccd985a48fcc5f4c42e21b5e3d5cebc1151be1f81f3c71a1a3bb16ea66e0f8df063cdc24ff502c731caf087a23b9d253b56da133f5ea5aa7a1ad887693b25bce7020895c6d31301587bf0303ba388c3fac13142f0f01cfd2456542e09deee77bc0da2af64eb7cf6786ec826c0251709ff0b8850e51ff576ae5cb9f0236bc7f2f622824c1732f1b04e4fc3289b8d9bbf502cc0f9e31d2d25dc3dbfb8a2d6cd62ca8d443b7800274ab867d06c64807d97cc9ec8ef1991d72e1879b7b25b938df26e0cd08b6dd37efb4712b6ed0bdd6fe1d2fd149856b006738ce7633b14c28647
+
+{
+  "id": 1,
+  "book_id": 2
+}
+
+### recover chapter
+DELETE localhost:9999/api/chapters/delete
+Content-Type: application/json
+Authorization: 039789be04d602dfe5dd6f2b248342080a9fdd97237064430ac953d5ad0896aadccd985a48fcc5f4c42e21b5e3d5cebc1151be1f81f3c71a1a3bb16ea66e0f8df063cdc24ff502c731caf087a23b9d253b56da133f5ea5aa7a1ad887693b25bce7020895c6d31301587bf0303ba388c3fac13142f0f01cfd2456542e09deee77bc0da2af64eb7cf6786ec826c0251709ff0b8850e51ff576ae5cb9f0236bc7f2f622824c1732f1b04e4fc3289b8d9bbf502cc0f9e31d2d25dc3dbfb8a2d6cd62ca8d443b7800274ab867d06c64807d97cc9ec8ef1991d72e1879b7b25b938df26e0cd08b6dd37efb4712b6ed0bdd6fe1d2fd149856b006738ce7633b14c28647
+
+{
+  "id": 1,
+  "book_id": 2,
+  "active": true
+}
+
+
+### search by title
+GET localhost:9999/api/search/title
+Content-Type: application/json
+Authorization:
+
+{
+  "title": "Red"
+}
+
+### search by author
+GET localhost:9999/api/search/author
+Content-Type: application/json
+Authorization:
+
+{
+  "author": "Ru"
+}
+
+### get books by author_id
+GET localhost:9999/api/search/author/books
+Content-Type: application/json
+Authorization:
+
+{
+  "author_id": 1
+}
+
+### search genres
+GET localhost:9999/api/search/genre
+Content-Type: application/json
+Authorization: 45907b27c34f96be540f03e88257029725712b9cb6fe70ca6194d1c8db7d43dff8277e6f683686de6d86bba968e750a66067a06bf951ee5d74444b946f068a1c63fead20703571b7fc7a0750d1fa4397bc537c386554bbcab830a40f0dbb9971f018b49357d96191a5587b87db07992b812665caaa1d5722ac8a810c4a66eb7ae44d590797960660850c5fae8e2e08135eb1df25882110772629bc798494005763f98722f15dc1203b1c38a29f5ffe070022d65e9dc9425453a2901bd106ffab72253ed93ed4c3a57b8114232881a726994e0cbd5d6cedbd07e28532f97bd9b5296b157759a6afecbf23299c55cb36fd375387a00234cd482002cb821c277605
+
+{
+  "genre_name": "Fa"
+}
+
+### get books by genre id
+GET localhost:9999/api/books/genre
+Content-Type: application/json
+Authorization: 0c479ef7f2f61c624baeb9314b34383a5e2ae98e970548664ab7dfe27f6c3e69c69195b256c9660b5a53184ecd489842c26c218f50d89ca391c18ea130f916833d8763186e064eabc085d174229ada8938ca11bc1518f5a06bd564e0559a25396e6d29e0f5822fd15663bfd40fe8793fc08f3c1c2eb1d04a8207a73df350ada8389b9e1ccad4ec641969712648f73c22281fabd2da404fa3b5eaf433200bec7251759107baf86eb99b7745c69dd115472e699b6f32cbedd6c9ea86a22bf28042079050884ec0d671f79b13d1a563601476235c44216ad6157b85c03faba22fc63d7300cab4d0b96f17eb46e4e6eff98996a77e691fe7e65ffbcdaf08b78487f1
+
+{
+  "genre_id": 3,
+  "last_id": 0
+}
+
+
+### add like
+POST localhost:9999/api/rating/like
+Authorization:
+Content-Type: application/json
+
+{
+  "book_id": 2
+}
+
+### get like id
+GET localhost:9999/api/rating/like
+Authorization: 83ebab7fbc1576870d488df6462b4e4f2594244cf39154d45266bf20cfec4e4de36ca17712bb985eb6c7b9e8f4e7284e93fa711fcc7ff2a6b04e3e67a975e3ef6bb27b779be0d34f26e723a03a2c7165fbddcf2befb541503608a59991ca297c26689015538b62e01da963d4348b351ed16e2043b4fc9ae0f6308413862c15a83465bf6b78893ba9143d14ecf24918788bb525c65e940b1595b99e2e0068459dc4e510b2441fd03d96d7a92aee5f0ad28204b5da449f3b3fba102c9320bc8d1e375c8c3d556982aa88653919d9f7e4cfd82ca5796f1c282d8ffd63cef3239e0bec976be4a059b1c2a177776787a0ac3fff98d0b927aea94e7cfa2b640dc63fcd
+Content-Type: application/json
+
+{
+  "book_id": 2
+}
+
+### delete like
+DELETE localhost:9999/api/rating/like
+Authorization:
+Content-Type: application/json
+
+{
+  "like_id": 1
+}
+
+### get book's likes
+GET localhost:9999/api/rating/book
+Authorization:
+Content-Type: application/json
+
+{
+  "book_id": 2
+}
+
+
 
