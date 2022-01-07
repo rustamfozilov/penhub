@@ -1,0 +1,8 @@
+{
+  "username": "app",
+  "password": "pass",
+  "host": "localhost",
+  "port": "5432",
+  "database": "penhub_db",
+  "images_path": "D:\\penhub\\images"
+}
